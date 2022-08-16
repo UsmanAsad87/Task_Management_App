@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -25,16 +25,16 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 12),
-      padding: const EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 10),
-      height: 70,
+      margin:  EdgeInsets.symmetric(vertical: 12.h),
+      padding: EdgeInsets.only(left: 20.w, top: 15.h, right: 20.w, bottom: 10.h),
+      height: 70.h,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
-            offset: const Offset(0, 10),
-            blurRadius: 50,
+            offset:  Offset(0.w, 10.h),
+            blurRadius: 50.r,
             color: const Color(0xFF9F9F9F).withOpacity(0.2),
           )
         ],
@@ -42,8 +42,8 @@ class CustomTextField extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.only(
-              right: 10.0,
+            padding:  EdgeInsets.only(
+              right: 10.w,
             ),
             child: Icon(
               icon,
@@ -69,42 +69,6 @@ class CustomTextField extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class CustomButton extends StatelessWidget {
-  CustomButton({
-    required this.onPressed,
-    required this.buttonText, required this.fillColor,
-  });
-  final Function()? onPressed;
-  final String buttonText;
-  final Color fillColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: RawMaterialButton(
-        elevation: 2,
-        fillColor: fillColor,
-        //splashColor: Colors.greenAccent,
-        onPressed: onPressed,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-            side: fillColor==Colors.white?const BorderSide(width: 2, color: Color(0xFF004064)):BorderSide.none),
-        child: SizedBox(
-          height: 70,
-          width: double.maxFinite,
-          child: Center(
-            child: Text(buttonText,style: GoogleFonts.poppins(
-                color: fillColor==Colors.white?const Color(0xff171C1F):const Color(0xffFFFFFF),
-                fontSize: 16,
-                fontWeight: FontWeight.w400),),
-          ),
-        ),
       ),
     );
   }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:task_management/constants.dart';
-import 'package:task_management/widgets/commons.dart';
+import 'package:task_management/utils/constants.dart';
+import 'package:task_management/widgets/auth/custom_button.dart';
+import 'package:task_management/widgets/auth/custom_text_field.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -36,26 +38,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: EdgeInsets.all(15.h),
           child: Column(
             children: [
               SizedBox(height: size.height * 0.1),
               //LOGO
               Center(
                 child: RichText(
-                  text: const TextSpan(children: [
+                  text:  TextSpan(children: [
                     TextSpan(
                         text: 'LO',
                         style: TextStyle(
                             fontWeight: FontWeight.w900,
                             color: kBlueColor,
-                            fontSize: 36)),
+                            fontSize: 36.sp)),
                     TextSpan(
                         text: 'GO',
                         style: TextStyle(
                             fontWeight: FontWeight.w900,
                             color: Colors.black,
-                            fontSize: 36)),
+                            fontSize: 36.sp)),
                   ]),
                 ),
               ),
@@ -66,7 +68,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   'Create an account',
                   style: GoogleFonts.poppins(
                       color: kFontColor1,
-                      fontSize: 32,
+                      fontSize: 32.sp,
                       fontWeight: FontWeight.w600),
                 ),
               ),
@@ -76,7 +78,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   'Enter details in the given fields.',
                   style: GoogleFonts.poppins(
                       color: const Color(0xff45575B),
-                      fontSize: 15,
+                      fontSize: 15.sp,
                       fontWeight: FontWeight.w400,),
                 ),
               ),
@@ -169,16 +171,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: RichText(
                       text:  TextSpan(children: [
                         TextSpan(
-                            text: 'Already have an account?',
+                            text: 'Already have an account? ',
                             style: GoogleFonts.poppins(
                                 color: const Color(0xff171C1F),
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.w400)),
                         TextSpan(
                             text: 'Login',
                             style: GoogleFonts.poppins(
                                 color: const Color(0xff015EED),
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.w400,
                                 decoration: TextDecoration.underline,)),
                       ]),
