@@ -32,20 +32,14 @@ class CardAllProject extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      projectType,
-                      style: kBodyStyle1
-                    ),
-                    Text(
-                      projectTitle,
-                      style: kBodyStyle2
-                    ),
+                    Text(projectType, style: kBodyStyle1),
+                    Text(projectTitle, style: kBodyStyle2),
                     //commnents
                     Row(
                       children: [
                         Stack(
                           children: [
-                             SizedBox(
+                            SizedBox(
                               height: 15.h,
                               width: 25.w,
                             ),
@@ -65,7 +59,8 @@ class CardAllProject extends StatelessWidget {
                                   width: 15.w,
                                   decoration: BoxDecoration(
                                       color: const Color(0xFFFFB800),
-                                      borderRadius: BorderRadius.circular(25.0.r),
+                                      borderRadius:
+                                          BorderRadius.circular(25.0.r),
                                       border: Border.all(color: Colors.white)),
                                 ))
                           ],
@@ -86,12 +81,11 @@ class CardAllProject extends StatelessWidget {
               animation: true,
               percent: progressPercent,
               center: Text(
-                "${(progressPercent*100).toInt()}%",
-                style:
-                kCircularPercentageStyle,
+                "${(progressPercent * 100).toInt()}%",
+                style: kCircularPercentageStyle,
               ),
               circularStrokeCap: CircularStrokeCap.round,
-              progressColor:kProgressColor,
+              progressColor: kProgressColor,
             ),
           ],
         ),

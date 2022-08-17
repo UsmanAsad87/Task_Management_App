@@ -3,6 +3,7 @@ import 'package:task_management/utils/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SplashScreen extends StatelessWidget {
+  static const routeName = '/splashScreen';
   const SplashScreen({Key? key}) : super(key: key);
 
   @override

@@ -6,6 +6,7 @@ import 'package:dotted_dashed_line/dotted_dashed_line.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AllProjectsScreen extends StatefulWidget {
+  static const routeName = '/all-project-screen';
   const AllProjectsScreen({Key? key}) : super(key: key);
 
   @override
@@ -19,18 +20,27 @@ class _AllProjectsScreenState extends State<AllProjectsScreen> {
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: AppBar(
+        leading: const BackButton(color: kPrimaryColor),
         backgroundColor: kWhiteColor,
         elevation: 0,
-        title: Text('All Projects',style: kHeadingStyle3,),
+        title: Text(
+          'All Projects',
+          style: kHeadingStyle3,
+        ),
         centerTitle: true,
         actions: [
-          IconButton(onPressed: (){}, icon: const Icon(Icons.calendar_month,color: kPrimaryColor,))
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.calendar_month,
+                color: kPrimaryColor,
+              ))
         ],
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
-          padding:  EdgeInsets.all(kDefaultPadding),
+          padding: EdgeInsets.all(kDefaultPadding),
           child: Column(
             children: [
               //date_day
@@ -46,7 +56,7 @@ class _AllProjectsScreenState extends State<AllProjectsScreen> {
                     dateTextStyle: kDateStyle,
                     dayTextStyle: kDayStyle,
                     // height: 150.h,
-                     width: 50.w,
+                    width: 50.w,
                     onDateChange: (date) {
                       setState(() {
                         _selectedValue = date;
@@ -55,22 +65,73 @@ class _AllProjectsScreenState extends State<AllProjectsScreen> {
                   ),
                 ],
               ),
-              SizedBox(height:20.h),
-              const CardAllProject(projectTitle: 'Management App Design', projectType: 'Design', noOfComments: 2, progressPercent: 0.5),
-              const DottedDashedLine(height: 0, width: double.maxFinite, axis: Axis.horizontal,dashColor: kFontColor2,),
-              const CardAllProject(projectTitle: 'Management App Design', projectType: 'Design', noOfComments: 2, progressPercent: 0.5),
-              const DottedDashedLine(height: 0, width: double.maxFinite, axis: Axis.horizontal,dashColor: kFontColor2,),
-              const CardAllProject(projectTitle: 'Management App Design', projectType: 'Design', noOfComments: 2, progressPercent: 0.5),
-              const DottedDashedLine(height: 0, width: double.maxFinite, axis: Axis.horizontal,dashColor: kFontColor2,),
-              const CardAllProject(projectTitle: 'Management App Design', projectType: 'Design', noOfComments: 2, progressPercent: 0.5),
-              const DottedDashedLine(height: 0, width: double.maxFinite, axis: Axis.horizontal,dashColor: kFontColor2,),
-              const CardAllProject(projectTitle: 'Management App Design', projectType: 'Design', noOfComments: 2, progressPercent: 0.5),
-              const DottedDashedLine(height: 0, width: double.maxFinite, axis: Axis.horizontal,dashColor: kFontColor2,),
-              const CardAllProject(projectTitle: 'Management App Design', projectType: 'Design', noOfComments: 2, progressPercent: 0.5),
-              const DottedDashedLine(height: 0, width: double.maxFinite, axis: Axis.horizontal,dashColor: kFontColor2,),
-
-
-
+              SizedBox(height: 20.h),
+              const CardAllProject(
+                  projectTitle: 'Management App Design',
+                  projectType: 'Design',
+                  noOfComments: 2,
+                  progressPercent: 0.5),
+              const DottedDashedLine(
+                height: 0,
+                width: double.maxFinite,
+                axis: Axis.horizontal,
+                dashColor: kFontColor2,
+              ),
+              const CardAllProject(
+                  projectTitle: 'Management App Design',
+                  projectType: 'Design',
+                  noOfComments: 2,
+                  progressPercent: 0.5),
+              const DottedDashedLine(
+                height: 0,
+                width: double.maxFinite,
+                axis: Axis.horizontal,
+                dashColor: kFontColor2,
+              ),
+              const CardAllProject(
+                  projectTitle: 'Management App Design',
+                  projectType: 'Design',
+                  noOfComments: 2,
+                  progressPercent: 0.5),
+              const DottedDashedLine(
+                height: 0,
+                width: double.maxFinite,
+                axis: Axis.horizontal,
+                dashColor: kFontColor2,
+              ),
+              const CardAllProject(
+                  projectTitle: 'Management App Design',
+                  projectType: 'Design',
+                  noOfComments: 2,
+                  progressPercent: 0.5),
+              const DottedDashedLine(
+                height: 0,
+                width: double.maxFinite,
+                axis: Axis.horizontal,
+                dashColor: kFontColor2,
+              ),
+              const CardAllProject(
+                  projectTitle: 'Management App Design',
+                  projectType: 'Design',
+                  noOfComments: 2,
+                  progressPercent: 0.5),
+              const DottedDashedLine(
+                height: 0,
+                width: double.maxFinite,
+                axis: Axis.horizontal,
+                dashColor: kFontColor2,
+              ),
+              const CardAllProject(
+                  projectTitle: 'Management App Design',
+                  projectType: 'Design',
+                  noOfComments: 2,
+                  progressPercent: 0.5),
+              const DottedDashedLine(
+                height: 0,
+                width: double.maxFinite,
+                axis: Axis.horizontal,
+                dashColor: kFontColor2,
+              ),
             ],
           ),
         ),

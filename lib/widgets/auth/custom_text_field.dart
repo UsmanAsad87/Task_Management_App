@@ -25,15 +25,16 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin:  EdgeInsets.symmetric(vertical: 12.h),
-      padding: EdgeInsets.only(left: 20.w, top: 15.h, right: 20.w, bottom: 10.h),
+      margin: EdgeInsets.symmetric(vertical: 12.h),
+      padding:
+          EdgeInsets.only(left: 20.w, top: 15.h, right: 20.w, bottom: 10.h),
       height: 70.h,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
-            offset:  Offset(0.w, 10.h),
+            offset: Offset(0.w, 10.h),
             blurRadius: 50.r,
             color: const Color(0xFF9F9F9F).withOpacity(0.2),
           )
@@ -42,7 +43,7 @@ class CustomTextField extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            padding:  EdgeInsets.only(
+            padding: EdgeInsets.only(
               right: 10.w,
             ),
             child: Icon(

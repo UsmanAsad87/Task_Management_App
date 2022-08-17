@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 class ActiveProjectTile extends StatelessWidget {
   final String projectTitle;
   final String progressStatus;
@@ -15,20 +14,21 @@ class ActiveProjectTile extends StatelessWidget {
     required this.projectTitle,
     required this.progressStatus,
     required this.imagePath,
-    required this.statusCount, required this.imageBgColor,
+    required this.statusCount,
+    required this.imageBgColor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 85.h,
-      padding:  EdgeInsets.all(14.sp),
+      padding: EdgeInsets.all(14.sp),
       decoration: BoxDecoration(
         color: const Color(0xFFFFFFFF),
         borderRadius: BorderRadius.circular(10.0.r),
         boxShadow: [
           BoxShadow(
-            offset:  Offset(3.w, 20.h),
+            offset: Offset(3.w, 20.h),
             blurRadius: 50.r,
             color: const Color(0xFF9F9F9F).withOpacity(0.18),
           ),
@@ -58,7 +58,7 @@ class ActiveProjectTile extends StatelessWidget {
                   child: Image.asset(imagePath),
                 ),
               ),
-               SizedBox(
+              SizedBox(
                 width: 10.w,
               ),
               Padding(
@@ -87,7 +87,7 @@ class ActiveProjectTile extends StatelessWidget {
                             borderRadius: BorderRadius.circular(25.0.r),
                           ),
                         ),
-                         SizedBox(
+                        SizedBox(
                           width: 5.w,
                         ),
                         Text(

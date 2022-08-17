@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:task_management/Screens/Auth/signup.dart';
+import 'package:task_management/Screens/Home/home_screen.dart';
 import 'package:task_management/utils/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +9,7 @@ import 'package:task_management/widgets/auth/custom_button.dart';
 import 'package:task_management/widgets/auth/custom_text_field.dart';
 
 class LoginScreen extends StatefulWidget {
+  static const routeName = '/login-screen';
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
@@ -33,14 +36,14 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
-          padding:  EdgeInsets.all(15.h),
+          padding: EdgeInsets.all(15.h),
           child: Column(
             children: [
               SizedBox(height: size.height * 0.1),
               //LOGO
               Center(
                 child: RichText(
-                  text:  TextSpan(children: [
+                  text: TextSpan(children: [
                     TextSpan(
                         text: 'LO',
                         style: TextStyle(
@@ -138,23 +141,29 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: size.height * 0.03),
 
               CustomButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, HomeScreen.routeName);
+                },
                 buttonText: 'Login',
                 fillColor: const Color(0xff004064),
               ),
               CustomButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, SignUpScreen.routeName);
+                },
                 buttonText: 'Create an account',
                 fillColor: Colors.white,
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, SignUpScreen.routeName);
+                },
                 child: Align(
                     alignment: Alignment.center,
                     child: Text(
                       'Don\'t have an account?',
                       style: GoogleFonts.poppins(
-                          color:const Color(0xff171C1F),
+                          color: const Color(0xff171C1F),
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w400),
                     )),
@@ -166,5 +175,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-

@@ -4,15 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:task_management/utils/constants.dart';
 import 'package:task_management/widgets/single_task/attached_file.dart';
 import 'package:task_management/widgets/single_task/custom_small_button.dart';
+import 'package:task_management/widgets/single_task/mile_stone_item.dart';
 
-class SingleChatScreen2 extends StatefulWidget {
-  const SingleChatScreen2({Key? key}) : super(key: key);
-
+class SingleTaskScreen2 extends StatefulWidget {
+  static const routeName = '/single_task_screen_2';
+  const SingleTaskScreen2({Key? key}) : super(key: key);
   @override
-  _SingleChatScreen2State createState() => _SingleChatScreen2State();
+  _SingleTaskScreen2State createState() => _SingleTaskScreen2State();
 }
 
-class _SingleChatScreen2State extends State<SingleChatScreen2> {
+class _SingleTaskScreen2State extends State<SingleTaskScreen2> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -39,13 +40,15 @@ class _SingleChatScreen2State extends State<SingleChatScreen2> {
           Positioned(
             left: 0,
             right: 0,
-            top: (size.height * 0.25) - 30,
+            top: (size.height * 0.17) - 30,
             child: Container(
-              height: size.height - (size.height * 0.3),
+              height: size.height - (size.height * 0.28),
               padding: EdgeInsets.only(left: 20.w, right: 20.w),
               decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(35.r)),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(35.r),
+                      topRight: Radius.circular(35.r))),
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
@@ -75,7 +78,7 @@ class _SingleChatScreen2State extends State<SingleChatScreen2> {
                           ),
                           CustomSmallButton(
                               onPressed: () {},
-                              buttonText: 'One Time',
+                              buttonText: 'MileStone',
                               fillColor: Colors.blueAccent,
                               textColor: Colors.white),
                         ],
@@ -102,8 +105,8 @@ class _SingleChatScreen2State extends State<SingleChatScreen2> {
                           ),
                           CustomSmallButton(
                               onPressed: () {},
-                              buttonText: 'High',
-                              fillColor: Colors.red,
+                              buttonText: 'Mid',
+                              fillColor: Colors.green,
                               textColor: Colors.white)
                         ],
                       ),
@@ -120,24 +123,59 @@ class _SingleChatScreen2State extends State<SingleChatScreen2> {
                     ),
                     Row(
                       children: [
-                        Text('15',style: kBodyStyle4,),
+                        Text(
+                          '15',
+                          style: kBodyStyle4,
+                        ),
                         Container(
-                          height:50.h ,
+                          height: 50.h,
                           width: 40.w,
                           margin: EdgeInsets.symmetric(horizontal: 10),
-                          padding: EdgeInsets.symmetric(vertical: 14.h,horizontal: 8.h),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 14.h, horizontal: 8.h),
                           decoration: BoxDecoration(
                               color: kPrimaryColor,
                               borderRadius: BorderRadius.circular(8.r)),
                           child: Text(
-                            'oct',style:kBodyStyle5 ,
-
+                            'oct',
+                            style: kBodyStyle5,
                           ),
                         ),
-                        Text('22',style: kBodyStyle4,),
+                        Text(
+                          '22',
+                          style: kBodyStyle4,
+                        ),
                       ],
                     ),
-
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10, top: 15),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'MileStone',
+                          style: kBodyStyle4,
+                        ),
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        MilestoneItem(
+                          title: 'Design Phase',
+                          hr: 22,
+                          min: 20,
+                        ),
+                        MilestoneItem(
+                          title: 'Development',
+                          hr: 29,
+                          min: 54,
+                        ),
+                        MilestoneItem(
+                          title: 'Testing',
+                          hr: 32,
+                          min: 2,
+                        ),
+                      ],
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Align(
@@ -167,7 +205,9 @@ class _SingleChatScreen2State extends State<SingleChatScreen2> {
                         ],
                       ),
                     ),
-
+                    SizedBox(
+                      height: 20.h,
+                    )
                   ],
                 ),
               ),

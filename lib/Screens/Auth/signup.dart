@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:task_management/Screens/Auth/login.dart';
 import 'package:task_management/utils/constants.dart';
 import 'package:task_management/widgets/auth/custom_button.dart';
 import 'package:task_management/widgets/auth/custom_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignUpScreen extends StatefulWidget {
+  static const routeName = '/signup-screen';
   const SignUpScreen({Key? key}) : super(key: key);
 
   @override
@@ -45,7 +47,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               //LOGO
               Center(
                 child: RichText(
-                  text:  TextSpan(children: [
+                  text: TextSpan(children: [
                     TextSpan(
                         text: 'LO',
                         style: TextStyle(
@@ -77,9 +79,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: Text(
                   'Enter details in the given fields.',
                   style: GoogleFonts.poppins(
-                      color: const Color(0xff45575B),
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.w400,),
+                    color: const Color(0xff45575B),
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ),
               SizedBox(height: size.height * 0.03),
@@ -137,54 +140,60 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 obscure: phoneObscure,
                 leadingIcon: phoneObscure == false
                     ? InkWell(
-                    onTap: () {
-                      setState(() {
-                        phoneObscure = !phoneObscure;
-                      });
-                    },
-                    child: const Icon(CupertinoIcons.eye,
-                        color: Color(0xFF8C8C8C)))
+                        onTap: () {
+                          setState(() {
+                            phoneObscure = !phoneObscure;
+                          });
+                        },
+                        child: const Icon(CupertinoIcons.eye,
+                            color: Color(0xFF8C8C8C)))
                     : InkWell(
-                    onTap: () {
-                      setState(() {
-                        phoneObscure = !phoneObscure;
-                      });
-                    },
-                    child: const Icon(
-                      CupertinoIcons.eye_slash,
-                      color: Color(0xFF8C8C8C),
-                    )),
+                        onTap: () {
+                          setState(() {
+                            phoneObscure = !phoneObscure;
+                          });
+                        },
+                        child: const Icon(
+                          CupertinoIcons.eye_slash,
+                          color: Color(0xFF8C8C8C),
+                        )),
                 onFieldSubmitted: (_) {},
                 inputType: TextInputType.phone,
               ),
               SizedBox(height: size.height * 0.025),
 
               CustomButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, LoginScreen.routeName);
+                },
                 buttonText: 'Create',
                 fillColor: const Color(0xff004064),
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, LoginScreen.routeName);
+                },
                 child: Align(
-                    alignment: Alignment.center,
-                    child: RichText(
-                      text:  TextSpan(children: [
-                        TextSpan(
-                            text: 'Already have an account? ',
-                            style: GoogleFonts.poppins(
-                                color: const Color(0xff171C1F),
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w400)),
-                        TextSpan(
-                            text: 'Login',
-                            style: GoogleFonts.poppins(
-                                color: const Color(0xff015EED),
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w400,
-                                decoration: TextDecoration.underline,)),
-                      ]),
-                    ),),
+                  alignment: Alignment.center,
+                  child: RichText(
+                    text: TextSpan(children: [
+                      TextSpan(
+                          text: 'Already have an account? ',
+                          style: GoogleFonts.poppins(
+                              color: const Color(0xff171C1F),
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400)),
+                      TextSpan(
+                          text: 'Login',
+                          style: GoogleFonts.poppins(
+                            color: const Color(0xff015EED),
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w400,
+                            decoration: TextDecoration.underline,
+                          )),
+                    ]),
+                  ),
+                ),
               ),
             ],
           ),

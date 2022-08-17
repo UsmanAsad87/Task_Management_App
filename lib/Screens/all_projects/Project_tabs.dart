@@ -4,6 +4,7 @@ import 'package:task_management/utils/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProjectsTab extends StatefulWidget {
+  static const routeName = '/project-tab-screen';
   const ProjectsTab({Key? key}) : super(key: key);
 
   @override
@@ -105,6 +106,7 @@ class _ProjectsTabState extends State<ProjectsTab>
       child: Scaffold(
         backgroundColor: kWhiteColor,
         appBar: AppBar(
+          leading: const BackButton(color: kPrimaryColor),
           backgroundColor: kWhiteColor,
           elevation: 0,
           title: Text(
@@ -123,9 +125,13 @@ class _ProjectsTabState extends State<ProjectsTab>
         ),
         body: SingleChildScrollView(
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-             SizedBox(height: 10.h,),
+            SizedBox(
+              height: 10.h,
+            ),
             buildTabRow(context),
-             SizedBox(height: 10.h,),
+            SizedBox(
+              height: 10.h,
+            ),
             handleTabPages(context, currentIndex),
           ]),
         ),

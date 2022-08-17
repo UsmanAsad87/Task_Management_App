@@ -35,18 +35,18 @@ class _WeeklyProjectsState extends State<WeeklyProjects> {
                         progressPercent: 0.5,
                       ),
                       ProjectCard(
-                        cardColor: Color(0xFF488DE5),
-                        weekRemaining: 1,
-                        projectTitle: 'Management App Design',
-                        noOfComments: 3,
-                        progressPercent: 0.6,
-                      ),
-                      ProjectCard(
                         cardColor: Color(0xFF4F283D),
                         weekRemaining: 3,
                         projectTitle: 'Management App Design',
                         noOfComments: 5,
                         progressPercent: 0.2,
+                      ),
+                      ProjectCard(
+                        cardColor: Color(0xFF488DE5),
+                        weekRemaining: 1,
+                        projectTitle: 'Management App Design',
+                        noOfComments: 3,
+                        progressPercent: 0.6,
                       ),
                       ProjectCard(
                         cardColor: kPrimaryColor,
@@ -60,7 +60,7 @@ class _WeeklyProjectsState extends State<WeeklyProjects> {
                 ),
 
                 Container(
-                  padding:  EdgeInsets.symmetric(vertical: 20.h),
+                  padding: EdgeInsets.symmetric(vertical: 20.h),
                   alignment: Alignment.topLeft,
                   child: Text(
                     'Active Projects',
@@ -71,39 +71,39 @@ class _WeeklyProjectsState extends State<WeeklyProjects> {
                 Column(
                   children: const [
                     ActiveProjectTile(
-                      projectTitle: 'Graphic Design',
-                      progressStatus: 'Inprogress',
-                      imagePath: 'assets/icons/graphicDesign.png',
-                      statusCount: 4,
-                      imageBgColor: Color(0xFF1D4064) ,
-                    ),
-                    ActiveProjectTile(
                       projectTitle: 'Web Development',
                       progressStatus: 'Completed',
                       imagePath: 'assets/icons/web.png',
                       statusCount: 4,
-                      imageBgColor: Color(0xFF75BDF9) ,
+                      imageBgColor: Color(0xFF75BDF9),
                     ),
                     ActiveProjectTile(
                       projectTitle: 'App Development',
                       progressStatus: 'Inprogress',
                       imagePath: 'assets/icons/app.png',
                       statusCount: 4,
-                      imageBgColor: Color(0xFF412A3C) ,
+                      imageBgColor: Color(0xFF412A3C),
+                    ),
+                    ActiveProjectTile(
+                      projectTitle: 'Graphic Design',
+                      progressStatus: 'Inprogress',
+                      imagePath: 'assets/icons/graphicDesign.png',
+                      statusCount: 4,
+                      imageBgColor: Color(0xFF1D4064),
                     ),
                     ActiveProjectTile(
                       projectTitle: 'App Development',
                       progressStatus: 'Inprogress',
                       imagePath: 'assets/icons/app.png',
                       statusCount: 4,
-                      imageBgColor: Color(0xFF412A3C) ,
+                      imageBgColor: Color(0xFF412A3C),
                     ),
                     ActiveProjectTile(
                       projectTitle: 'App Development',
                       progressStatus: 'Inprogress',
                       imagePath: 'assets/icons/app.png',
                       statusCount: 4,
-                      imageBgColor: Color(0xFF412A3C) ,
+                      imageBgColor: Color(0xFF412A3C),
                     ),
                   ],
                 )

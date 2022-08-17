@@ -32,12 +32,12 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
           buildTabItem(
               index: 0, icon: "assets/icons/home_icon.png", text: ('Home')),
           buildTabItem(
-              index: 1, icon: "assets/icons/home_icon.png", text: ('Messages')),
+              index: 1, icon: "assets/icons/mesages.png", text: ('Messages')),
           placeholder,
           buildTabItem(
-              index: 2, icon: "assets/icons/home_icon.png", text: ('Projects')),
+              index: 2, icon: "assets/icons/projects.png", text: ('Projects')),
           buildTabItem(
-              index: 3, icon: "assets/icons/home_icon.png", text: ('Setting')),
+              index: 3, icon: "assets/icons/setting.png", text: ('Setting')),
         ],
       ),
     );
@@ -64,9 +64,21 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               isSelected
-                  ? Container(height: 5.h,width: 35.w,decoration: BoxDecoration(color: kPrimaryColor,borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20)),),)
-                  : Container(height: 5.h,width: 35.w,color: kWhiteColor,),
-
+                  ? Container(
+                      height: 5.h,
+                      width: 35.w,
+                      decoration: BoxDecoration(
+                        color: kPrimaryColor,
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20)),
+                      ),
+                    )
+                  : Container(
+                      height: 5.h,
+                      width: 35.w,
+                      color: kWhiteColor,
+                    ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: ImageIcon(
@@ -80,8 +92,7 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
                 style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color:
-                        isSelected ? kPrimaryColor : kInactiveNavItemColor),
+                    color: isSelected ? kPrimaryColor : kInactiveNavItemColor),
               )
             ],
           ),

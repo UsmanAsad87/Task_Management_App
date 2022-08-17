@@ -5,14 +5,15 @@ import 'package:task_management/utils/constants.dart';
 import 'package:task_management/widgets/single_task/attached_file.dart';
 import 'package:task_management/widgets/single_task/custom_small_button.dart';
 
-class SingleChatScreen extends StatefulWidget {
-  const SingleChatScreen({Key? key}) : super(key: key);
+class SingleTaskScreen extends StatefulWidget {
+  static const routeName = '/single_task_screen';
+  const SingleTaskScreen({Key? key}) : super(key: key);
 
   @override
-  _SingleChatScreenState createState() => _SingleChatScreenState();
+  _SingleTaskScreenState createState() => _SingleTaskScreenState();
 }
 
-class _SingleChatScreenState extends State<SingleChatScreen> {
+class _SingleTaskScreenState extends State<SingleTaskScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -120,24 +121,30 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
                     ),
                     Row(
                       children: [
-                        Text('15',style: kBodyStyle4,),
+                        Text(
+                          '15',
+                          style: kBodyStyle4,
+                        ),
                         Container(
-                          height:50.h ,
+                          height: 50.h,
                           width: 40.w,
                           margin: EdgeInsets.symmetric(horizontal: 10),
-                          padding: EdgeInsets.symmetric(vertical: 14.h,horizontal: 8.h),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 14.h, horizontal: 8.h),
                           decoration: BoxDecoration(
                               color: kPrimaryColor,
                               borderRadius: BorderRadius.circular(8.r)),
                           child: Text(
-                            'oct',style:kBodyStyle5 ,
-
+                            'oct',
+                            style: kBodyStyle5,
                           ),
                         ),
-                        Text('22',style: kBodyStyle4,),
+                        Text(
+                          '22',
+                          style: kBodyStyle4,
+                        ),
                       ],
                     ),
-
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Align(
@@ -167,7 +174,9 @@ class _SingleChatScreenState extends State<SingleChatScreen> {
                         ],
                       ),
                     ),
-
+                    SizedBox(
+                      height: 100,
+                    )
                   ],
                 ),
               ),

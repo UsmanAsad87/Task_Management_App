@@ -26,8 +26,9 @@ class ProjectCard extends StatelessWidget {
     return Container(
       height: 165.h,
       width: 165.w,
-      margin:  EdgeInsets.only(top: 10.h,  right: 10.w),
-      padding:  EdgeInsets.only(top: 18.h, bottom: 12.h, left: 13.w, right: 13.w),
+      margin: EdgeInsets.only(top: 10.h, right: 10.w),
+      padding:
+          EdgeInsets.only(top: 18.h, bottom: 12.h, left: 13.w, right: 13.w),
       decoration: BoxDecoration(
         color: cardColor,
         border: Border.all(
@@ -80,7 +81,7 @@ class ProjectCard extends StatelessWidget {
             children: [
               Stack(
                 children: [
-                   SizedBox(
+                  SizedBox(
                     height: 15.h,
                     width: 25.w,
                   ),

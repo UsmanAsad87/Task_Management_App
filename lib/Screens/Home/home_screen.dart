@@ -5,11 +5,16 @@ import 'package:task_management/Screens/Home/completed_projects.dart';
 import 'package:task_management/Screens/Home/pending_projects.dart';
 import 'package:task_management/Screens/Home/recent_projects.dart';
 import 'package:task_management/Screens/Home/weekly_projects.dart';
+import 'package:task_management/Screens/all_projects/all_project_screen.dart';
+import 'package:task_management/Screens/chat/chat_screen.dart';
+import 'package:task_management/Screens/create_project/create_project_screen.dart';
+import 'package:task_management/Screens/single_task/single_task_screen_2.dart';
 import 'package:task_management/utils/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_management/widgets/homeScreen/tab_bar_material_widget.dart';
 
 class HomeScreen extends StatefulWidget {
+  static const routeName = '/Home_screen';
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -96,16 +101,16 @@ class _HomeScreenState extends State<HomeScreen>
     });
     switch (index) {
       case 0:
-        print('Home');
+        Navigator.pushNamed(context, HomeScreen.routeName);
         break;
       case 1:
-        print('Home');
+        Navigator.pushNamed(context, ChatScreen.routeName);
         break;
       case 2:
-        print('Home');
+        Navigator.pushNamed(context, AllProjectsScreen.routeName);
         break;
       case 3:
-        print('Home');
+        //Navigator.pushNamed(context, SingleTaskScreen2.routeName);
         break;
     }
   }
@@ -117,7 +122,9 @@ class _HomeScreenState extends State<HomeScreen>
       child: Scaffold(
         backgroundColor: kWhiteColor,
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, CreateProjectScreen.routeName);
+          },
           backgroundColor: kPrimaryColor,
           child: const Icon(
             Icons.add,

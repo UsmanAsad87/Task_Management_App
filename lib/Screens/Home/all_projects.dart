@@ -28,7 +28,7 @@ class _AllProjectsState extends State<AllProjects> {
                   child: Row(
                     children: const [
                       ProjectCard(
-                        cardColor: kPrimaryColor,
+                        cardColor: Colors.green,
                         weekRemaining: 2,
                         projectTitle: 'Management App Design',
                         noOfComments: 2,
@@ -60,7 +60,7 @@ class _AllProjectsState extends State<AllProjects> {
                 ),
 
                 Container(
-                  padding:  EdgeInsets.symmetric(vertical: 20.h),
+                  padding: EdgeInsets.symmetric(vertical: 20.h),
                   alignment: Alignment.topLeft,
                   child: Text(
                     'Active Projects',
@@ -75,35 +75,35 @@ class _AllProjectsState extends State<AllProjects> {
                       progressStatus: 'Inprogress',
                       imagePath: 'assets/icons/graphicDesign.png',
                       statusCount: 4,
-                      imageBgColor: Color(0xFF1D4064) ,
+                      imageBgColor: Color(0xFF1D4064),
                     ),
                     ActiveProjectTile(
                       projectTitle: 'Web Development',
                       progressStatus: 'Completed',
                       imagePath: 'assets/icons/web.png',
                       statusCount: 4,
-                      imageBgColor: Color(0xFF75BDF9) ,
+                      imageBgColor: Color(0xFF75BDF9),
                     ),
                     ActiveProjectTile(
                       projectTitle: 'App Development',
                       progressStatus: 'Inprogress',
                       imagePath: 'assets/icons/app.png',
                       statusCount: 4,
-                      imageBgColor: Color(0xFF412A3C) ,
+                      imageBgColor: Color(0xFF412A3C),
                     ),
                     ActiveProjectTile(
                       projectTitle: 'App Development',
                       progressStatus: 'Inprogress',
                       imagePath: 'assets/icons/app.png',
                       statusCount: 4,
-                      imageBgColor: Color(0xFF412A3C) ,
+                      imageBgColor: Color(0xFF412A3C),
                     ),
                     ActiveProjectTile(
                       projectTitle: 'App Development',
                       progressStatus: 'Inprogress',
                       imagePath: 'assets/icons/app.png',
                       statusCount: 4,
-                      imageBgColor: Color(0xFF412A3C) ,
+                      imageBgColor: Color(0xFF412A3C),
                     ),
                   ],
                 )

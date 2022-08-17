@@ -5,7 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CustomButton extends StatelessWidget {
   CustomButton({
     required this.onPressed,
-    required this.buttonText, required this.fillColor,
+    required this.buttonText,
+    required this.fillColor,
   });
   final Function()? onPressed;
   final String buttonText;
@@ -22,15 +23,22 @@ class CustomButton extends StatelessWidget {
         onPressed: onPressed,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.r),
-            side: fillColor==Colors.white?BorderSide(width: 2.w, color: Color(0xFF004064)):BorderSide.none),
+            side: fillColor == Colors.white
+                ? BorderSide(width: 2.w, color: Color(0xFF004064))
+                : BorderSide.none),
         child: SizedBox(
           height: 70.h,
-          width: double.maxFinite,
+          width: double.infinity,
           child: Center(
-            child: Text(buttonText,style: GoogleFonts.poppins(
-                color: fillColor==Colors.white?const Color(0xff171C1F):const Color(0xffFFFFFF),
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w400),),
+            child: Text(
+              buttonText,
+              style: GoogleFonts.poppins(
+                  color: fillColor == Colors.white
+                      ? const Color(0xff171C1F)
+                      : const Color(0xffFFFFFF),
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w400),
+            ),
           ),
         ),
       ),

@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_management/utils/constants.dart';
 
-
-
 class AttachedFile extends StatelessWidget {
   final String filename;
   const AttachedFile({
-    Key? key, required this.filename,
+    Key? key,
+    required this.filename,
   }) : super(key: key);
 
   @override
@@ -26,10 +25,10 @@ class AttachedFile extends StatelessWidget {
                 color: Color(0xFFF1F1F1),
               ),
               Positioned(
-                left:5.w,
+                left: 5.w,
                 top: 7.h,
                 child: Icon(
-                  size:20.h,
+                  size: 20.h,
                   Icons.attach_file,
                 ),
               ),
