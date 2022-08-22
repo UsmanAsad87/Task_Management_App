@@ -31,13 +31,13 @@ List demeChatMessages = [
     isSender: true,
   ),
   ChatMessage(
-    text: "",
+    text: "w",
     messageType: ChatMessageType.image,
     messageStatus: MessageStatus.viewed,
     isSender: false,
   ),
   ChatMessage(
-    text: "",
+    text: "w",
     messageType: ChatMessageType.image,
     messageStatus: MessageStatus.viewed,
     isSender: true,

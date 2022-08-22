@@ -1,13 +1,20 @@
 import 'dart:ui';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
+import 'package:task_management/Screens/comments/comments_screen.dart';
 import 'package:task_management/utils/constants.dart';
 import 'package:task_management/widgets/single_task/attached_file.dart';
 import 'package:task_management/widgets/single_task/custom_small_button.dart';
 
+import '../../widgets/commons/custom_create_button.dart';
+import 'edit_task_screen.dart';
+
 class SingleTaskScreen extends StatefulWidget {
+  final String title;
+  final bool isPending;
   static const routeName = '/single_task_screen';
-  const SingleTaskScreen({Key? key}) : super(key: key);
+  const SingleTaskScreen({Key? key, required this.title, this.isPending = true})
+      : super(key: key);
 
   @override
   _SingleTaskScreenState createState() => _SingleTaskScreenState();
@@ -18,25 +25,14 @@ class _SingleTaskScreenState extends State<SingleTaskScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: const Color(0xff1D4064),
-      appBar: AppBar(backgroundColor: const Color(0xff1D4064), elevation: 0),
+      backgroundColor: kPrimaryColor,
+      appBar: AppBar(
+        leading: const BackButton(color: kFontColor1),
+        backgroundColor: kPrimaryColor,
+        elevation: 0,
+      ),
       body: Stack(
         children: [
-          Positioned(
-            right: 0,
-            left: 0,
-            child: Container(
-              width: 160.w,
-              height: 160.h,
-              alignment: Alignment.bottomCenter,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      fit: BoxFit.contain,
-                      image: AssetImage(
-                        'assets/background_image.png',
-                      ))),
-            ),
-          ),
           Positioned(
             left: 0,
             right: 0,
@@ -45,7 +41,7 @@ class _SingleTaskScreenState extends State<SingleTaskScreen> {
               height: size.height - (size.height * 0.3),
               padding: EdgeInsets.only(left: 20.w, right: 20.w),
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: kSecondaryColor,
                   borderRadius: BorderRadius.circular(35.r)),
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -57,7 +53,7 @@ class _SingleTaskScreenState extends State<SingleTaskScreen> {
                       height: 5.h,
                       width: 100.w,
                       decoration: BoxDecoration(
-                        color: kPrimaryColor.withOpacity(0.4),
+                        color: kWhiteColor.withOpacity(0.2),
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                       ),
                     ),
@@ -67,7 +63,7 @@ class _SingleTaskScreenState extends State<SingleTaskScreen> {
                         children: [
                           Expanded(
                             child: Text(
-                              'Management App Design',
+                              widget.title,
                               style: kHeadingStyle3,
                             ),
                           ),
@@ -76,8 +72,8 @@ class _SingleTaskScreenState extends State<SingleTaskScreen> {
                           ),
                           CustomSmallButton(
                               onPressed: () {},
-                              buttonText: 'One Time',
-                              fillColor: Colors.blueAccent,
+                              buttonText: 'Task',
+                              fillColor: kTextFieldColor,
                               textColor: Colors.white),
                         ],
                       ),
@@ -96,15 +92,26 @@ class _SingleTaskScreenState extends State<SingleTaskScreen> {
                           CustomSmallButton(
                               onPressed: () {},
                               buttonText: 'Design',
-                              fillColor: const Color(0xFFD5FFCE),
-                              textColor: const Color(0xFF8D8D8D)),
+                              fillColor: kPrimaryColor,
+                              textColor: const Color(0xFF1B1B1B)),
                           SizedBox(
                             width: 10.w,
                           ),
                           CustomSmallButton(
                               onPressed: () {},
                               buttonText: 'High',
-                              fillColor: Colors.red,
+                              fillColor: kTextFieldColor,
+                              textColor: Colors.white),
+                          SizedBox(
+                            width: 10.w,
+                          ),
+                          CustomSmallButton(
+                              onPressed: () {},
+                              buttonText:
+                                  widget.isPending ? 'Pending' : 'Completed',
+                              fillColor: widget.isPending
+                                  ? const Color(0xFF1D95E9)
+                                  : const Color(0xFF499B0D),
                               textColor: Colors.white)
                         ],
                       ),
@@ -115,7 +122,7 @@ class _SingleTaskScreenState extends State<SingleTaskScreen> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'Due Date',
-                          style: kBodyStyle4,
+                          style: kBodyStyle13,
                         ),
                       ),
                     ),
@@ -123,7 +130,7 @@ class _SingleTaskScreenState extends State<SingleTaskScreen> {
                       children: [
                         Text(
                           '15',
-                          style: kBodyStyle4,
+                          style: kBodyStyle13,
                         ),
                         Container(
                           height: 50.h,
@@ -132,7 +139,7 @@ class _SingleTaskScreenState extends State<SingleTaskScreen> {
                           padding: EdgeInsets.symmetric(
                               vertical: 14.h, horizontal: 8.h),
                           decoration: BoxDecoration(
-                              color: kPrimaryColor,
+                              color: const Color(0xFF322B1F),
                               borderRadius: BorderRadius.circular(8.r)),
                           child: Text(
                             'oct',
@@ -141,9 +148,12 @@ class _SingleTaskScreenState extends State<SingleTaskScreen> {
                         ),
                         Text(
                           '22',
-                          style: kBodyStyle4,
+                          style: kBodyStyle13,
                         ),
                       ],
+                    ),
+                    SizedBox(
+                      height: 10.h,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -151,7 +161,7 @@ class _SingleTaskScreenState extends State<SingleTaskScreen> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'Attachments',
-                          style: kBodyStyle4,
+                          style: kBodyStyle13,
                         ),
                       ),
                     ),
@@ -173,6 +183,28 @@ class _SingleTaskScreenState extends State<SingleTaskScreen> {
                           ),
                         ],
                       ),
+                    ),
+                    SizedBox(height: 20.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomCreateButton(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, CommentsScreen.routeName);
+                            },
+                            buttonText: 'View Comments',
+                            fillColor: kSecondaryColor),
+                        widget.isPending
+                            ? CustomCreateButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, EditTaskScreen.routeName);
+                                },
+                                buttonText: 'Edit',
+                                fillColor: kPrimaryColor)
+                            : const SizedBox(),
+                      ],
                     ),
                     SizedBox(
                       height: 100,

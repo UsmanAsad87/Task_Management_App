@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_management/Screens/Auth/login.dart';
-import 'package:task_management/Screens/Auth/signup.dart';
-import 'package:task_management/Screens/Home/home_screen.dart';
-import 'package:task_management/Screens/all_projects/Project_tabs.dart';
-import 'package:task_management/Screens/comments/comments_screen.dart';
-import 'package:task_management/Screens/create_project/create_project_screen.dart';
-import 'package:task_management/Screens/single_task/single_task_screen.dart';
-import 'package:task_management/Screens/single_task/single_task_screen_2.dart';
+import 'package:task_management/Screens/splash/splash_screen.dart';
 import 'package:task_management/router.dart';
-
-import 'Screens/chat/chat_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,7 +28,7 @@ class MyApp extends StatelessWidget {
           home: child,
         );
       },
-      child: const SingleTaskScreen2(),
+      child: const SplashScreen(),
     );
   }
 }

@@ -19,12 +19,13 @@ class TabBarMaterialWidget extends StatefulWidget {
 class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
   @override
   Widget build(BuildContext context) {
-    final placeholder = Opacity(
+    const placeholder = Opacity(
       opacity: 0,
       child: IconButton(icon: Icon(Icons.no_cell), onPressed: null),
     );
 
     return BottomAppBar(
+      color: kNavBarColor,
       notchMargin: 8,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -32,12 +33,12 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
           buildTabItem(
               index: 0, icon: "assets/icons/home_icon.png", text: ('Home')),
           buildTabItem(
-              index: 1, icon: "assets/icons/mesages.png", text: ('Messages')),
+              index: 1, icon: "assets/icons/mesages.png", text: ('Chat')),
           placeholder,
           buildTabItem(
-              index: 2, icon: "assets/icons/projects.png", text: ('Projects')),
+              index: 2, icon: "assets/icons/projects.png", text: ('History')),
           buildTabItem(
-              index: 3, icon: "assets/icons/setting.png", text: ('Setting')),
+              index: 3, icon: "assets/icons/setting.png", text: ('Settings')),
         ],
       ),
     );
@@ -66,9 +67,9 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
               isSelected
                   ? Container(
                       height: 5.h,
-                      width: 35.w,
-                      decoration: BoxDecoration(
-                        color: kPrimaryColor,
+                      width: 45.w,
+                      decoration: const BoxDecoration(
+                        color: kWhiteFontColor,
                         borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(20),
                             bottomRight: Radius.circular(20)),
@@ -76,23 +77,24 @@ class _TabBarMaterialWidgetState extends State<TabBarMaterialWidget> {
                     )
                   : Container(
                       height: 5.h,
-                      width: 35.w,
-                      color: kWhiteColor,
+                      width: 45.w,
+                      color: kWhiteColor.withOpacity(0),
                     ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: ImageIcon(
-                  AssetImage(
-                    icon,
-                  ),
-                ),
-              ),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: ImageIcon(
+                    AssetImage(
+                      icon,
+                    ),
+                    color: isSelected ? kWhiteFontColor : kFontColor4,
+                    size: 20.h,
+                  )),
               Text(
                 text,
                 style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: isSelected ? kPrimaryColor : kInactiveNavItemColor),
+                    color: isSelected ? kWhiteFontColor : kFontColor4),
               )
             ],
           ),

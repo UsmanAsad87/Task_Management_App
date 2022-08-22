@@ -11,10 +11,10 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kWhiteColor,
+      backgroundColor: kSecondaryColor,
       appBar: AppBar(
-        leading: const BackButton(color: kPrimaryColor),
-        backgroundColor: kWhiteColor,
+        leading: const BackButton(color: kWhiteColor),
+        backgroundColor: kSecondaryColor,
         elevation: 0,
         title: Text(
           'Chat',

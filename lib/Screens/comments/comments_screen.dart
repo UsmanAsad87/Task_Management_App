@@ -1,8 +1,7 @@
-import 'dart:ui';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:task_management/utils/constants.dart';
-import 'package:task_management/widgets/create_project/custom_create_text_field.dart';
+import 'package:task_management/widgets/comments/comments_textfield.dart';
 
 class CommentsScreen extends StatefulWidget {
   static const routeName = '/comments_screen';
@@ -13,7 +12,8 @@ class CommentsScreen extends StatefulWidget {
 }
 
 class _CommentsScreenState extends State<CommentsScreen> {
-  final TextEditingController _descController = TextEditingController();
+  final TextEditingController _commentController = TextEditingController();
+  final TextEditingController _replyController = TextEditingController();
   String searchModeValue = "Newest";
 
   List<DropdownMenuItem<String>> searchModeItems = [
@@ -24,7 +24,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
 
   @override
   void dispose() {
-    _descController.dispose();
+    _commentController.dispose();
+    _replyController.dispose();
     super.dispose();
   }
 
@@ -32,29 +33,14 @@ class _CommentsScreenState extends State<CommentsScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: const Color(0xff1D4064),
+      backgroundColor: kPrimaryColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xff1D4064),
+        backgroundColor: kPrimaryColor,
         elevation: 0,
-        leading: const BackButton(color: kPrimaryColor),
+        leading: const BackButton(color: kSecondaryColor),
       ),
       body: Stack(
         children: [
-          Positioned(
-            right: 0,
-            left: 0,
-            child: Container(
-              width: 160.w,
-              height: 160.h,
-              alignment: Alignment.bottomCenter,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      fit: BoxFit.contain,
-                      image: AssetImage(
-                        'assets/background_image.png',
-                      ))),
-            ),
-          ),
           Positioned(
             left: 0,
             right: 0,
@@ -63,7 +49,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
               height: size.height - (size.height * 0.25),
               padding: EdgeInsets.only(left: 20.w, right: 20.w),
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: kSecondaryColor,
                   borderRadius: BorderRadius.circular(35.r)),
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -75,7 +61,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                       height: 5.h,
                       width: 100.w,
                       decoration: BoxDecoration(
-                        color: kPrimaryColor.withOpacity(0.4),
+                        color: kWhiteColor.withOpacity(0.20),
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                       ),
                     ),
@@ -106,24 +92,24 @@ class _CommentsScreenState extends State<CommentsScreen> {
                         ],
                       ),
                     ),
-                    CustomCreateTextField(
-                      controller: _descController,
+                    CommentsTextField(
+                      controller: _commentController,
                       hintText: 'Enter Comment here',
                       onChanged: (val) {},
                       onFieldSubmitted: (val) {},
                       maxLines: 2,
                     ),
                     Container(
-                      height: 2.h,
+                      height: 0.8.h,
                       margin: EdgeInsets.symmetric(
                           vertical: 20.h, horizontal: 10.w),
                       width: double.infinity,
-                      color: Color(0x004064).withOpacity(0.1),
+                      color: const Color(0xFFC9CBCB).withOpacity(0.61),
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CircleAvatar(
+                        const CircleAvatar(
                           backgroundImage: NetworkImage(
                               'https://i.pinimg.com/originals/06/81/39/068139bff0b22024e775bfcbb42ed3b4.jpg'),
                         ),
@@ -152,7 +138,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                               //admin comment
                               Text(
                                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus a neque varius Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus a neque varius ',
-                                style: kTextButtonInActiveStyle,
+                                style: kBodyStyle6,
                               ),
                               Row(
                                 children: [
@@ -175,7 +161,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                   TextButton.icon(
                                     onPressed: () {},
                                     icon: Icon(Icons.reply_all_outlined),
-                                    label: Text('Replies'),
+                                    label: Text(' 2 Replies'),
                                     style: TextButton.styleFrom(
                                       primary: kFontColor3,
                                     ),
@@ -183,19 +169,20 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                 ],
                               ),
 
-                              CustomCreateTextField(
-                                controller: _descController,
+                              CommentsTextField(
+                                controller: _replyController,
                                 hintText: 'Reply to Admin\'s comment',
                                 onChanged: (val) {},
                                 onFieldSubmitted: (val) {},
                                 maxLines: 2,
                               ),
                               Container(
-                                height: 2.h,
+                                height: 0.8.h,
                                 margin: EdgeInsets.symmetric(
                                     vertical: 20.h, horizontal: 10.w),
                                 width: double.infinity,
-                                color: Color(0x004064).withOpacity(0.1),
+                                color:
+                                    const Color(0xFFC9CBCB).withOpacity(0.61),
                               ),
                               //name and time of admin
                               Padding(
@@ -220,15 +207,16 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                     // comment reply
                                     Text(
                                       'Lorem ipsum dolor sit amet, m ipsum dolor sit amet, consectlit. Sed ut purus a neque varius ',
-                                      style: kTextButtonInActiveStyle,
+                                      style: kBodyStyle6,
                                     ),
 
                                     Container(
-                                      height: 2.h,
+                                      height: 0.8.h,
                                       margin: EdgeInsets.symmetric(
-                                          vertical: 20.h, horizontal: 10.w),
+                                          vertical: 20.h, horizontal: 0.w),
                                       width: double.infinity,
-                                      color: Color(0x004064).withOpacity(0.1),
+                                      color: const Color(0xFFC9CBCB)
+                                          .withOpacity(0.61),
                                     ),
                                     Row(
                                       mainAxisAlignment:
@@ -248,7 +236,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                     // comment reply
                                     Text(
                                       'Lorem ipsum dolor sit amet, m ipsum dolor sit amet, consectlit. Sed ut purus a neque varius ',
-                                      style: kTextButtonInActiveStyle,
+                                      style: kBodyStyle6,
                                     ),
                                   ],
                                 ),
@@ -259,11 +247,11 @@ class _CommentsScreenState extends State<CommentsScreen> {
                       ],
                     ),
                     Container(
-                      height: 2.h,
+                      height: 0.8.h,
                       margin: EdgeInsets.symmetric(
                           vertical: 20.h, horizontal: 10.w),
                       width: double.infinity,
-                      color: Color(0x004064).withOpacity(0.1),
+                      color: const Color(0xFFC9CBCB).withOpacity(0.61),
                     ),
                     SizedBox(
                       height: 100,

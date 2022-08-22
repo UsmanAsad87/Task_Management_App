@@ -3,12 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:task_management/Screens/Home/all_projects.dart';
 import 'package:task_management/Screens/Home/completed_projects.dart';
 import 'package:task_management/Screens/Home/pending_projects.dart';
-import 'package:task_management/Screens/Home/recent_projects.dart';
-import 'package:task_management/Screens/Home/weekly_projects.dart';
-import 'package:task_management/Screens/all_projects/all_project_screen.dart';
 import 'package:task_management/Screens/chat/chat_screen.dart';
-import 'package:task_management/Screens/create_project/create_project_screen.dart';
-import 'package:task_management/Screens/single_task/single_task_screen_2.dart';
+import 'package:task_management/Screens/history/history.dart';
+import 'package:task_management/Screens/notification/notification.dart';
+import 'package:task_management/Screens/settings/setting_screen.dart';
+import 'package:task_management/Screens/single_task/create_task_screen.dart';
 import 'package:task_management/utils/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_management/widgets/homeScreen/tab_bar_material_widget.dart';
@@ -23,7 +22,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
-  List<String> tabNames = ['Pending', 'Recent', 'Completed', 'All', 'Weekly'];
+  List<String> tabNames = [
+    'All',
+    'Pending',
+    'Completed',
+  ];
   late TabController _tabController;
   late ScrollController _horizontalScrollController;
 
@@ -71,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen>
         });
       },
       child: Padding(
-        padding: EdgeInsets.only(right: 20.w),
+        padding: EdgeInsets.only(right: 40.w),
         child: Text(title,
             style: tabNames.indexOf(title) == currentIndex
                 ? kTextButtonActiveStyle
@@ -83,15 +86,11 @@ class _HomeScreenState extends State<HomeScreen>
   handleTabPages(BuildContext context, int index) {
     switch (index) {
       case 0:
-        return const PendingProjects();
-      case 1:
-        return const RecentProjects();
-      case 2:
-        return const CompletedProjects(); //
-      case 3:
         return const AllProjects();
-      case 4:
-        return const WeeklyProjects();
+      case 1:
+        return const PendingProjects();
+      case 2:
+        return const CompletedProjects();
     }
   }
 
@@ -101,16 +100,26 @@ class _HomeScreenState extends State<HomeScreen>
     });
     switch (index) {
       case 0:
-        Navigator.pushNamed(context, HomeScreen.routeName);
+        //Navigator.pushNamed(context, HomeScreen.routeName);
         break;
       case 1:
-        Navigator.pushNamed(context, ChatScreen.routeName);
+        Navigator.pushNamed(context, ChatScreen.routeName)
+            .then((value) => setState(() {
+                  this.index = 0;
+                }));
+
         break;
       case 2:
-        Navigator.pushNamed(context, AllProjectsScreen.routeName);
+        Navigator.pushNamed(context, HistoryScreen.routeName)
+            .then((value) => setState(() {
+                  this.index = 0;
+                }));
         break;
       case 3:
-        //Navigator.pushNamed(context, SingleTaskScreen2.routeName);
+        Navigator.pushNamed(context, SettingScreen.routeName)
+            .then((value) => setState(() {
+                  this.index = 0;
+                }));
         break;
     }
   }
@@ -120,15 +129,15 @@ class _HomeScreenState extends State<HomeScreen>
     return DefaultTabController(
       length: tabNames.length,
       child: Scaffold(
-        backgroundColor: kWhiteColor,
+        backgroundColor: kSecondaryColor,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.pushNamed(context, CreateProjectScreen.routeName);
+            Navigator.pushNamed(context, CreateTaskScreen.routeName);
           },
-          backgroundColor: kPrimaryColor,
+          backgroundColor: kWhiteColor,
           child: const Icon(
             Icons.add,
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -145,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen>
                       Text(
                         'Hi Beyond',
                         style: GoogleFonts.poppins(
-                            color: Colors.black,
+                            color: kWhiteFontColor,
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w500),
                       ),
@@ -158,7 +167,10 @@ class _HomeScreenState extends State<HomeScreen>
                           child: Image.asset('assets/handImage.png')),
                     ],
                   ),
-                  subtitle: const Text('Good Afternoon'),
+                  subtitle: Text(
+                    'Good Afternoon',
+                    style: kBodyStyle11,
+                  ),
                   leading: const CircleAvatar(
                     backgroundImage: NetworkImage(
                         'https://i.pinimg.com/originals/06/81/39/068139bff0b22024e775bfcbb42ed3b4.jpg'),
@@ -171,27 +183,31 @@ class _HomeScreenState extends State<HomeScreen>
                           padding: EdgeInsets.all(4.0.h),
                           child: InkWell(
                               onTap: () {},
-                              child: const Icon(Icons.search,
-                                  color: Color(0xFF004064))),
+                              child: Icon(Icons.search,
+                                  size: 25.h, color: kPrimaryColor)),
                         ),
                         Padding(
                           padding: EdgeInsets.all(4.0.h),
                           child: InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, NotificationScreen.routeName);
+                              },
                               child: Stack(
                                 children: [
-                                  const Icon(
+                                  Icon(
                                     Icons.notifications,
-                                    color: Color(0xFF004064),
+                                    size: 25.h,
+                                    color: kPrimaryColor,
                                   ),
                                   Positioned(
-                                      right: 4.w,
+                                      right: 3.w,
                                       top: 0.h,
                                       child: Container(
-                                        height: 5.h,
-                                        width: 5.w,
+                                        height: 7.h,
+                                        width: 7.w,
                                         decoration: BoxDecoration(
-                                          color: const Color(0xFFFFB800),
+                                          color: kWhiteFontColor,
                                           borderRadius:
                                               BorderRadius.circular(25.0.r),
                                         ),
@@ -212,13 +228,7 @@ class _HomeScreenState extends State<HomeScreen>
                     //Your Projects Title
                     Align(
                       alignment: Alignment.topLeft,
-                      child: Text(
-                        'Your Projects',
-                        style: GoogleFonts.poppins(
-                            color: kFontColor1,
-                            fontSize: 24.sp,
-                            fontWeight: FontWeight.w500),
-                      ),
+                      child: Text('Your Projects', style: kHeadingStyle2),
                     ),
                   ],
                 ),

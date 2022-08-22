@@ -20,7 +20,7 @@ class Message extends StatelessWidget {
         case ChatMessageType.text:
           return TextMessage(message: message);
         case ChatMessageType.image:
-          return ImageMessage();
+          return ImageMessage(message: message);
         default:
           return SizedBox();
       }
@@ -36,7 +36,7 @@ class Message extends StatelessWidget {
           if (!message.isSender) ...[
             CircleAvatar(
               radius: 12.r,
-              backgroundImage: NetworkImage(
+              backgroundImage: const NetworkImage(
                   'https://i.pinimg.com/originals/06/81/39/068139bff0b22024e775bfcbb42ed3b4.jpg'),
             ),
             SizedBox(width: kDefaultPadding / 2),
@@ -46,7 +46,7 @@ class Message extends StatelessWidget {
             SizedBox(width: kDefaultPadding / 2),
             CircleAvatar(
               radius: 12.r,
-              backgroundImage: NetworkImage(
+              backgroundImage: const NetworkImage(
                   'https://i.pinimg.com/originals/06/81/39/068139bff0b22024e775bfcbb42ed3b4.jpg'),
             ),
           ],

@@ -1,64 +1,89 @@
 import 'package:flutter/material.dart';
+import 'package:task_management/Screens/Auth/login.dart';
 import 'package:task_management/utils/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   static const routeName = '/splashScreen';
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  Animation? animation;
+  AnimationController? animationController;
+  @override
+  void initState() {
+    super.initState();
+    _navigateToLogin();
+    animationController = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 2000));
+    animation = IntTween(begin: 0, end: 1000).animate(animationController!);
+    animationController!.forward();
+  }
+
+  @override
+  void dispose() {
+    animationController!.dispose();
+    super.dispose();
+  }
+
+  _navigateToLogin() async {
+    await Future.delayed(Duration(milliseconds: 2000), () {});
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (_) => const LoginScreen()));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kScaffoldBgColor,
-      body: Stack(
-        children: [
-          Align(
-            alignment: Alignment.center,
-            child: Transform.scale(
-              scale: 1.7,
-              child: Container(
-                height: 400.h,
-                decoration: BoxDecoration(
-                    color: kScaffoldCircleColor1,
-                    borderRadius: BorderRadius.circular(200)),
+        backgroundColor: kSecondaryColor,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/background_image_splash.png',
+                height: 267.h,
+                width: 267.w,
               ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Transform.scale(
-              scale: 1.3.h,
-              child: Container(
-                height: 400,
-                decoration: BoxDecoration(
-                    color: kScaffoldCircleColor2,
-                    borderRadius: BorderRadius.circular(200)),
+              SizedBox(
+                height: 30.h,
               ),
-            ),
+              Container(
+                width: 236.w,
+                height: 5.h,
+                child: LinearProgressIndicator(
+                  backgroundColor: Colors.white,
+                  color: kPrimaryColor,
+                  value: (animation!.value) / 100.0,
+                ),
+              )
+              /*Row(
+                children: [
+                  Center(
+                    child: Container(
+                      width: 267.h,
+                      //alignment: Alignment.center,
+                      //padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: LinearPercentIndicator(
+                        //padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        width: 200.0.w,
+                        lineHeight: 5.0.h,
+                        percent: 0.5,
+                        progressColor: kProgressColor,
+                        barRadius: Radius.circular(20.r),
+                      ),
+                    ),
+                  ),
+                ],
+              ),*/
+            ],
           ),
-          Align(
-            alignment: Alignment.center,
-            child: Transform.scale(
-              scale: 0.9,
-              child: Container(
-                height: 400.h,
-                decoration: BoxDecoration(
-                    color: kScaffoldCircleColor3,
-                    borderRadius: BorderRadius.circular(200)),
-              ),
-            ),
-          ),
-          Align(
-              alignment: Alignment.center,
-              child: Text(
-                'LOGO',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 50.sp,
-                    fontWeight: FontWeight.w900),
-              )),
-        ],
-      ),
-    );
+        ));
   }
 }

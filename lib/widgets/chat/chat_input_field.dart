@@ -13,8 +13,8 @@ class ChatInputField extends StatelessWidget {
         horizontal: kDefaultPadding,
         vertical: kDefaultPadding / 2,
       ),
-      decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
+      decoration: const BoxDecoration(
+        color: kSecondaryColor,
       ),
       child: SafeArea(
         child: Row(
@@ -25,7 +25,8 @@ class ChatInputField extends StatelessWidget {
                   horizontal: kDefaultPadding * 0.75,
                 ),
                 decoration: BoxDecoration(
-                  color: kPrimaryColor.withOpacity(0.05),
+                  color: kSecondaryColor,
+                  border: Border.all(width: 1, color: const Color(0xFF503F23)),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
@@ -33,6 +34,7 @@ class ChatInputField extends StatelessWidget {
                     SizedBox(width: kDefaultPadding / 4),
                     Expanded(
                       child: TextField(
+                        style: kBodyStyle6,
                         decoration: InputDecoration(
                           hintText: "Type message here ...",
                           hintStyle: kBodyStyle6,
@@ -40,22 +42,14 @@ class ChatInputField extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Icon(
-                      Icons.attach_file,
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color!
-                          .withOpacity(0.64),
+                    InkWell(
+                      onTap: () {},
+                      child: const Icon(Icons.attach_file, color: kFontColor4),
                     ),
                     SizedBox(width: kDefaultPadding / 4),
-                    Icon(
-                      Icons.send,
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .color!
-                          .withOpacity(0.64),
+                    InkWell(
+                      onTap: () {},
+                      child: const Icon(Icons.send, color: kFontColor4),
                     ),
                   ],
                 ),

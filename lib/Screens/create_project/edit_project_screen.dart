@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:task_management/Screens/projects/project.dart';
 import 'package:task_management/Screens/create_project/create_sub_task_screen.dart';
-import 'package:task_management/Screens/single_task/create_task_screen.dart';
+import 'package:task_management/Screens/single_task/edit_task_screen.dart';
 import 'package:task_management/utils/constants.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:task_management/widgets/commons/alert_dialog.dart';
 import 'package:task_management/widgets/commons/custom_create_button.dart';
 import 'package:task_management/widgets/commons/custom_create_text_field.dart';
 import 'package:task_management/widgets/commons/dotted_button.dart';
 
-class CreateProjectScreen extends StatefulWidget {
-  static const routeName = '/create_project';
-  const CreateProjectScreen({Key? key}) : super(key: key);
+class EditProjectScreen extends StatefulWidget {
+  static const routeName = '/edit_project';
+  const EditProjectScreen({Key? key}) : super(key: key);
 
   @override
-  State<CreateProjectScreen> createState() => _CreateProjectScreenState();
+  State<EditProjectScreen> createState() => _EditProjectScreenState();
 }
 
-class _CreateProjectScreenState extends State<CreateProjectScreen> {
+class _EditProjectScreenState extends State<EditProjectScreen> {
   late DateTime _selectedValue;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
@@ -39,7 +37,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
         backgroundColor: kSecondaryColor,
         elevation: 0,
         title: Text(
-          'Create Project',
+          'Edit Project',
           style: kHeadingStyle3,
         ),
         centerTitle: true,
@@ -62,35 +60,6 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const HeadingText(
-                title: 'Select Type',
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  DottedButton(
-                      width: (MediaQuery.of(context).size.width / 2) - 30,
-                      text: 'Create Task',
-                      height: 20.h,
-                      onPress: () {
-                        Navigator.pushNamed(
-                            context, CreateTaskScreen.routeName);
-                      }),
-                  CustomCreateButton(
-                      onPressed: () {},
-                      buttonText: 'Create Project',
-                      fillColor: kPrimaryColor)
-                ],
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              Container(
-                height: 1.h,
-                margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
-                width: double.infinity,
-                color: kWhiteFontColor.withOpacity(0.38),
-              ),
               const HeadingText(
                 title: 'Title *',
               ),
@@ -131,32 +100,54 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
               TaskTile(index: 1, title: 'Web Design', dateTime: DateTime.now()),
               TaskTile(index: 2, title: 'Web Dev', dateTime: DateTime.now()),
               SizedBox(height: 20.h),
+              const HeadingText(
+                title: 'Attach Files',
+              ),
+              RawMaterialButton(
+                elevation: 0,
+                fillColor: kTextFieldColor,
+                //splashColor: Colors.greenAccent,
+                onPressed: () {},
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+                child: SizedBox(
+                  height: 40.h,
+                  width: 120.w,
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.upload_outlined,
+                            color: Color(0xFFBFBFBF)),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10.0.w),
+                          child: Text(
+                            'Upload',
+                            style: kBodyStyle6,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CustomCreateButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                       buttonText: 'Cancel',
                       fillColor: kSecondaryColor),
                   CustomCreateButton(
                       onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                backgroundColor: Colors.transparent,
-                                actions: [
-                                  AlertBox(
-                                      text:
-                                          'You’ve successfully \n created a project',
-                                      buttonText: 'View Project',
-                                      onPressed: () {
-                                        Navigator.pushReplacementNamed(
-                                            context, ProjectScreen.routeName);
-                                      }),
-                                ],
-                              );
-                            });
+                        Navigator.pop(context);
                       },
                       buttonText: 'Done',
                       fillColor: kPrimaryColor)
@@ -219,9 +210,14 @@ class TaskTile extends StatelessWidget {
             DateFormat.yMd().format(dateTime),
             style: kBodyStyle14,
           ),
-          Icon(
-            Icons.edit_outlined,
-            color: kWhiteColor,
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, EditTaskScreen.routeName);
+            },
+            child: const Icon(
+              Icons.edit_outlined,
+              color: kWhiteColor,
+            ),
           )
         ],
       ),
