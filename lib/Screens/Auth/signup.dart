@@ -36,7 +36,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: kSecondaryColor,
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
@@ -46,30 +46,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
               SizedBox(height: size.height * 0.1),
               //LOGO
               Center(
-                child: RichText(
-                  text: TextSpan(children: [
-                    TextSpan(
-                        text: 'LO',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            color: kBlueColor,
-                            fontSize: 36.sp)),
-                    TextSpan(
-                        text: 'GO',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            color: Colors.black,
-                            fontSize: 36.sp)),
-                  ]),
+                child: Image.asset(
+                  'assets/background_image_splash.png',
+                  height: 90.h,
+                  width: 90.w,
                 ),
               ),
-              SizedBox(height: size.height * 0.05),
+              SizedBox(height: size.height * 0.04),
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
                   'Create an account',
                   style: GoogleFonts.poppins(
-                      color: kFontColor1,
+                      color: kWhiteFontColor,
                       fontSize: 32.sp,
                       fontWeight: FontWeight.w600),
                 ),
@@ -79,7 +68,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: Text(
                   'Enter details in the given fields.',
                   style: GoogleFonts.poppins(
-                    color: const Color(0xff45575B),
+                    color: kFontColor4,
                     fontSize: 15.sp,
                     fontWeight: FontWeight.w400,
                   ),
@@ -87,7 +76,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               SizedBox(height: size.height * 0.03),
               CustomTextField(
-                controller: _emailController,
+                controller: _userNameController,
                 icon: Icons.person_outline,
                 hintText: 'Username',
                 onChanged: (val) {},
@@ -135,63 +124,47 @@ class _SignUpScreenState extends State<SignUpScreen> {
               CustomTextField(
                 controller: _phoneController,
                 icon: Icons.phone,
+                obscure: false,
                 hintText: 'Phone',
                 onChanged: (val) {},
-                obscure: phoneObscure,
-                leadingIcon: phoneObscure == false
-                    ? InkWell(
-                        onTap: () {
-                          setState(() {
-                            phoneObscure = !phoneObscure;
-                          });
-                        },
-                        child: const Icon(CupertinoIcons.eye,
-                            color: Color(0xFF8C8C8C)))
-                    : InkWell(
-                        onTap: () {
-                          setState(() {
-                            phoneObscure = !phoneObscure;
-                          });
-                        },
-                        child: const Icon(
-                          CupertinoIcons.eye_slash,
-                          color: Color(0xFF8C8C8C),
-                        )),
                 onFieldSubmitted: (_) {},
                 inputType: TextInputType.phone,
               ),
-              SizedBox(height: size.height * 0.025),
+              SizedBox(height: size.height * 0.02),
 
               CustomButton(
                 onPressed: () {
                   Navigator.pushNamed(context, LoginScreen.routeName);
                 },
                 buttonText: 'Create',
-                fillColor: const Color(0xff004064),
+                fillColor: kPrimaryColor,
               ),
               InkWell(
                 onTap: () {
                   Navigator.pushNamed(context, LoginScreen.routeName);
                 },
-                child: Align(
-                  alignment: Alignment.center,
-                  child: RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                          text: 'Already have an account? ',
-                          style: GoogleFonts.poppins(
-                              color: const Color(0xff171C1F),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                            text: 'Already have an account? ',
+                            style: GoogleFonts.poppins(
+                                color: kWhiteFontColor,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400)),
+                        TextSpan(
+                            text: 'Login',
+                            style: GoogleFonts.poppins(
+                              color: kPrimaryColor,
                               fontSize: 14.sp,
-                              fontWeight: FontWeight.w400)),
-                      TextSpan(
-                          text: 'Login',
-                          style: GoogleFonts.poppins(
-                            color: const Color(0xff015EED),
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w400,
-                            decoration: TextDecoration.underline,
-                          )),
-                    ]),
+                              fontWeight: FontWeight.w400,
+                              decoration: TextDecoration.underline,
+                            )),
+                      ]),
+                    ),
                   ),
                 ),
               ),

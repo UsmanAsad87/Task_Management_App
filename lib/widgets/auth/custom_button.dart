@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:task_management/utils/constants.dart';
 
 class CustomButton extends StatelessWidget {
   CustomButton({
@@ -23,8 +24,8 @@ class CustomButton extends StatelessWidget {
         onPressed: onPressed,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.r),
-            side: fillColor == Colors.white
-                ? BorderSide(width: 2.w, color: Color(0xFF004064))
+            side: fillColor == kSecondaryColor
+                ? BorderSide(width: 3.w, color: kPrimaryColor)
                 : BorderSide.none),
         child: SizedBox(
           height: 70.h,
@@ -33,9 +34,9 @@ class CustomButton extends StatelessWidget {
             child: Text(
               buttonText,
               style: GoogleFonts.poppins(
-                  color: fillColor == Colors.white
-                      ? const Color(0xff171C1F)
-                      : const Color(0xffFFFFFF),
+                  color: fillColor == kPrimaryColor
+                      ? kSecondaryColor
+                      : kWhiteFontColor,
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w400),
             ),

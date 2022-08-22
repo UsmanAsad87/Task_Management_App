@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:task_management/Screens/Auth/forget_password.dart';
 import 'package:task_management/Screens/Auth/signup.dart';
 import 'package:task_management/Screens/Home/home_screen.dart';
 import 'package:task_management/utils/constants.dart';
@@ -32,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: kSecondaryColor,
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
@@ -42,30 +43,19 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: size.height * 0.1),
               //LOGO
               Center(
-                child: RichText(
-                  text: TextSpan(children: [
-                    TextSpan(
-                        text: 'LO',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            color: kBlueColor,
-                            fontSize: 36.sp)),
-                    TextSpan(
-                        text: 'GO',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            color: Colors.black,
-                            fontSize: 36.sp)),
-                  ]),
+                child: Image.asset(
+                  'assets/background_image_splash.png',
+                  height: 90.h,
+                  width: 90.w,
                 ),
               ),
-              SizedBox(height: size.height * 0.06),
+              SizedBox(height: size.height * 0.04),
               Row(
                 children: [
                   Text(
                     'Welcome Back',
                     style: GoogleFonts.poppins(
-                        color: kFontColor1,
+                        color: kWhiteFontColor,
                         fontSize: 32.sp,
                         fontWeight: FontWeight.w600),
                   ),
@@ -83,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Text(
                   'Login to continue using',
                   style: GoogleFonts.poppins(
-                      color: const Color(0xff45575B),
+                      color: kFontColor4,
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w400),
                 ),
@@ -127,13 +117,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 inputType: TextInputType.emailAddress,
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, ForgetPassword.routeName);
+                },
                 child: Align(
                     alignment: Alignment.centerRight,
                     child: Text(
                       'Forget Password?',
                       style: GoogleFonts.poppins(
-                          color: Color(0xff45575B),
+                          color: kFontColor4,
                           fontSize: 15.sp,
                           fontWeight: FontWeight.w400),
                     )),
@@ -142,31 +134,34 @@ class _LoginScreenState extends State<LoginScreen> {
 
               CustomButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, HomeScreen.routeName);
+                  Navigator.pushReplacementNamed(context, HomeScreen.routeName);
                 },
                 buttonText: 'Login',
-                fillColor: const Color(0xff004064),
+                fillColor: kPrimaryColor,
               ),
               CustomButton(
                 onPressed: () {
                   Navigator.pushNamed(context, SignUpScreen.routeName);
                 },
                 buttonText: 'Create an account',
-                fillColor: Colors.white,
+                fillColor: kSecondaryColor,
               ),
               InkWell(
                 onTap: () {
                   Navigator.pushNamed(context, SignUpScreen.routeName);
                 },
-                child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Don\'t have an account?',
-                      style: GoogleFonts.poppins(
-                          color: const Color(0xff171C1F),
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w400),
-                    )),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Don\'t have an account?',
+                        style: GoogleFonts.poppins(
+                            color: kWhiteFontColor,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w400),
+                      )),
+                ),
               ),
             ],
           ),

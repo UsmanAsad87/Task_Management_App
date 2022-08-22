@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_management/utils/constants.dart';
-import 'package:task_management/widgets/homeScreen/active_project_tile.dart';
+import 'package:task_management/widgets/homeScreen/quick_task_tile.dart';
 import 'package:task_management/widgets/homeScreen/project_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -30,30 +30,30 @@ class _AllProjectsState extends State<AllProjects> {
                       ProjectCard(
                         cardColor: Colors.green,
                         weekRemaining: 2,
-                        projectTitle: 'Management App Design',
+                        projectTitle: 'Web Development',
                         noOfComments: 2,
-                        progressPercent: 0.5,
+                        isCompleted: true,
                       ),
                       ProjectCard(
                         cardColor: Color(0xFF488DE5),
                         weekRemaining: 1,
                         projectTitle: 'Management App Design',
                         noOfComments: 3,
-                        progressPercent: 0.6,
+                        isCompleted: false,
                       ),
                       ProjectCard(
                         cardColor: Color(0xFF4F283D),
                         weekRemaining: 3,
-                        projectTitle: 'Management App Design',
+                        projectTitle: 'Web Development',
                         noOfComments: 5,
-                        progressPercent: 0.2,
+                        isCompleted: false,
                       ),
                       ProjectCard(
                         cardColor: kPrimaryColor,
                         weekRemaining: 2,
                         projectTitle: 'Management App Design',
                         noOfComments: 2,
-                        progressPercent: 0.5,
+                        isCompleted: true,
                       ),
                     ],
                   ),
@@ -63,47 +63,42 @@ class _AllProjectsState extends State<AllProjects> {
                   padding: EdgeInsets.symmetric(vertical: 20.h),
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Active Projects',
+                    'Quick Tasks',
                     style: kHeadingStyle2,
                   ),
                 ),
 
                 Column(
                   children: const [
-                    ActiveProjectTile(
-                      projectTitle: 'Graphic Design',
-                      progressStatus: 'Inprogress',
+                    QuickTaskTile(
+                      taskTitle: 'Front End Development',
+                      taskStatus: 'Inprogress',
                       imagePath: 'assets/icons/graphicDesign.png',
-                      statusCount: 4,
-                      imageBgColor: Color(0xFF1D4064),
+                      imageBgColor: kPrimaryColor,
                     ),
-                    ActiveProjectTile(
-                      projectTitle: 'Web Development',
-                      progressStatus: 'Completed',
+                    QuickTaskTile(
+                      taskTitle: 'BackEnd Development',
+                      taskStatus: 'Completed',
                       imagePath: 'assets/icons/web.png',
-                      statusCount: 4,
-                      imageBgColor: Color(0xFF75BDF9),
+                      imageBgColor: kPrimaryColor,
                     ),
-                    ActiveProjectTile(
-                      projectTitle: 'App Development',
-                      progressStatus: 'Inprogress',
+                    QuickTaskTile(
+                      taskTitle: 'Testing',
+                      taskStatus: 'Inprogress',
                       imagePath: 'assets/icons/app.png',
-                      statusCount: 4,
-                      imageBgColor: Color(0xFF412A3C),
+                      imageBgColor: kPrimaryColor,
                     ),
-                    ActiveProjectTile(
-                      projectTitle: 'App Development',
-                      progressStatus: 'Inprogress',
-                      imagePath: 'assets/icons/app.png',
-                      statusCount: 4,
-                      imageBgColor: Color(0xFF412A3C),
+                    QuickTaskTile(
+                      taskTitle: 'Front End Development',
+                      taskStatus: 'Completed',
+                      imagePath: 'assets/icons/graphicDesign.png',
+                      imageBgColor: kPrimaryColor,
                     ),
-                    ActiveProjectTile(
-                      projectTitle: 'App Development',
-                      progressStatus: 'Inprogress',
+                    QuickTaskTile(
+                      taskTitle: 'Testing',
+                      taskStatus: 'Inprogress',
                       imagePath: 'assets/icons/app.png',
-                      statusCount: 4,
-                      imageBgColor: Color(0xFF412A3C),
+                      imageBgColor: kPrimaryColor,
                     ),
                   ],
                 )

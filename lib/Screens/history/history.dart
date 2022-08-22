@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:task_management/Screens/all_projects/all_project_screen_2.dart';
+import 'package:task_management/Screens/history/history_Task_screen.dart';
+import 'package:task_management/Screens/history/history_project_screen.dart';
 import 'package:task_management/utils/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ProjectsTab extends StatefulWidget {
-  static const routeName = '/project-tab-screen';
-  const ProjectsTab({Key? key}) : super(key: key);
+class HistoryScreen extends StatefulWidget {
+  static const routeName = '/history-screen';
+  const HistoryScreen({Key? key}) : super(key: key);
 
   @override
-  State<ProjectsTab> createState() => _ProjectsTabState();
+  State<HistoryScreen> createState() => _HistoryScreenState();
 }
 
-class _ProjectsTabState extends State<ProjectsTab>
+class _HistoryScreenState extends State<HistoryScreen>
     with SingleTickerProviderStateMixin {
-  List<String> tabNames = [
-    'Graphic Design',
-    'App Development',
-    'Web Development',
-    'Graphic Design',
-  ];
+  List<String> tabNames = ['Projects', 'Quick Tasks'];
   late TabController _tabController;
   late ScrollController _horizontalScrollController;
 
@@ -69,12 +65,12 @@ class _ProjectsTabState extends State<ProjectsTab>
         decoration: BoxDecoration(
           color: tabNames.indexOf(title) == currentIndex
               ? kPrimaryColor
-              : kInactiveTabColor,
+              : kTextFieldColor,
           borderRadius: BorderRadius.circular(5.0.r),
         ),
-        height: 38.h,
+        height: 34.h,
         child: Padding(
-          padding: EdgeInsets.all(8.0.h),
+          padding: EdgeInsets.symmetric(vertical: 8.0.h, horizontal: 25.w),
           child: Center(
             child: Text(title,
                 style: tabNames.indexOf(title) == currentIndex
@@ -89,13 +85,9 @@ class _ProjectsTabState extends State<ProjectsTab>
   handleTabPages(BuildContext context, int index) {
     switch (index) {
       case 0:
-        return const AllProjectsScreen2();
+        return const HistoryProjectScreen();
       case 1:
-        return const AllProjectsScreen2();
-      case 2:
-        return const AllProjectsScreen2(); //
-      case 3:
-        return const AllProjectsScreen2();
+        return const HistoryTaskScreen();
     }
   }
 
@@ -104,13 +96,13 @@ class _ProjectsTabState extends State<ProjectsTab>
     return DefaultTabController(
       length: tabNames.length,
       child: Scaffold(
-        backgroundColor: kWhiteColor,
+        backgroundColor: kSecondaryColor,
         appBar: AppBar(
-          leading: const BackButton(color: kPrimaryColor),
-          backgroundColor: kWhiteColor,
+          leading: const BackButton(color: kWhiteColor),
+          backgroundColor: kSecondaryColor,
           elevation: 0,
           title: Text(
-            'All Projects',
+            'History',
             style: kHeadingStyle3,
           ),
           centerTitle: true,
@@ -119,21 +111,24 @@ class _ProjectsTabState extends State<ProjectsTab>
                 onPressed: () {},
                 icon: const Icon(
                   Icons.calendar_month,
-                  color: kPrimaryColor,
+                  color: kWhiteColor,
                 ))
           ],
         ),
         body: SingleChildScrollView(
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            SizedBox(
-              height: 10.h,
-            ),
-            buildTabRow(context),
-            SizedBox(
-              height: 10.h,
-            ),
-            handleTabPages(context, currentIndex),
-          ]),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 10.h,
+                ),
+                buildTabRow(context),
+                SizedBox(
+                  height: 10.h,
+                ),
+                handleTabPages(context, currentIndex),
+              ]),
         ),
       ),
     );

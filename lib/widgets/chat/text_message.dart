@@ -21,7 +21,8 @@ class TextMessage extends StatelessWidget {
             vertical: kDefaultPadding / 2,
           ),
           decoration: BoxDecoration(
-            color: message!.isSender ? Colors.white : Color(0xFFF3F3F3),
+            color:
+                message!.isSender ? const Color(0xFFCDB369) : kTextFieldColor,
             borderRadius: message!.isSender
                 ? BorderRadius.only(
                     bottomRight: Radius.circular(10.r),
@@ -31,21 +32,21 @@ class TextMessage extends StatelessWidget {
                     bottomRight: Radius.circular(10.r),
                     bottomLeft: Radius.circular(10.r),
                     topRight: Radius.circular(10.r)),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(5.w, 5.h),
-                blurRadius: 50.r,
-                color: message!.isSender
-                    ? const Color(0xFF9F9F9F).withOpacity(0.2)
-                    : const Color(0xFF9F9F9F).withOpacity(0.2),
-              )
-            ],
+            // boxShadow: [
+            //   BoxShadow(
+            //     offset: Offset(5.w, 5.h),
+            //     blurRadius: 50.r,
+            //     color: message!.isSender
+            //         ? const Color(0xFF9F9F9F).withOpacity(0.2)
+            //         : const Color(0xFF9F9F9F).withOpacity(0.2),
+            //   )
+            // ],
           ),
           child: SizedBox(
             width: MediaQuery.of(context).size.width * 0.6,
             child: Text(
               message!.text,
-              style: kBodyStyle6,
+              style: message!.isSender ? kBodyStyle6a : kBodyStyle6,
             ),
           ),
         ),
@@ -54,7 +55,7 @@ class TextMessage extends StatelessWidget {
           right: 10,
           child: Text(
             '9:00 PM',
-            style: kBodyStyle8,
+            style: message!.isSender ? kBodyStyle8a : kBodyStyle8,
           ),
         )
       ],
