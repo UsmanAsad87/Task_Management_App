@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:task_management/Screens/Auth/login.dart';
+import 'package:task_management/model/UserModel.dart';
+import 'package:task_management/resources/auth_methods.dart';
 import 'package:task_management/utils/constants.dart';
+import 'package:task_management/utils/toast.dart';
+import 'package:task_management/utils/validator.dart';
 import 'package:task_management/widgets/auth/custom_button.dart';
 import 'package:task_management/widgets/auth/custom_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,8 +24,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  GlobalKey<FormState> signUpKey = GlobalKey<FormState>();
   var passObscure = true;
-  var phoneObscure = true;
+
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -75,66 +81,115 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               SizedBox(height: size.height * 0.03),
-              CustomTextField(
-                controller: _userNameController,
-                icon: Icons.person_outline,
-                hintText: 'Username',
-                onChanged: (val) {},
-                obscure: false,
-                onFieldSubmitted: (_) {},
-                inputType: TextInputType.text,
-              ),
-              CustomTextField(
-                controller: _passController,
-                icon: Icons.lock_outline,
-                hintText: 'Password',
-                onChanged: (val) {},
-                obscure: passObscure,
-                leadingIcon: passObscure == false
-                    ? InkWell(
-                        onTap: () {
-                          setState(() {
-                            passObscure = !passObscure;
-                          });
-                        },
-                        child: const Icon(CupertinoIcons.eye,
-                            color: Color(0xFF8C8C8C)))
-                    : InkWell(
-                        onTap: () {
-                          setState(() {
-                            passObscure = !passObscure;
-                          });
-                        },
-                        child: const Icon(
-                          CupertinoIcons.eye_slash,
-                          color: Color(0xFF8C8C8C),
-                        )),
-                onFieldSubmitted: (_) {},
-                inputType: TextInputType.emailAddress,
-              ),
-              CustomTextField(
-                controller: _emailController,
-                icon: Icons.email_outlined,
-                hintText: 'Email',
-                onChanged: (val) {},
-                obscure: false,
-                onFieldSubmitted: (_) {},
-                inputType: TextInputType.emailAddress,
-              ),
-              CustomTextField(
-                controller: _phoneController,
-                icon: Icons.phone,
-                obscure: false,
-                hintText: 'Phone',
-                onChanged: (val) {},
-                onFieldSubmitted: (_) {},
-                inputType: TextInputType.phone,
+              Form(
+                key: signUpKey,
+                child: Column(
+                  children: [
+                    CustomTextField(
+                      controller: _userNameController,
+                      validatorFn: uNameValidator,
+                      icon: Icons.person_outline,
+                      hintText: 'Username',
+                      onChanged: (val) {},
+                      obscure: false,
+                      onFieldSubmitted: (_) {},
+                      inputType: TextInputType.text,
+                    ),
+                    CustomTextField(
+                      controller: _passController,
+                      icon: Icons.lock_outline,
+                      validatorFn: passValidator,
+                      hintText: 'Password',
+                      onChanged: (val) {},
+                      obscure: passObscure,
+                      leadingIcon: passObscure == false
+                          ? InkWell(
+                              onTap: () {
+                                setState(() {
+                                  passObscure = !passObscure;
+                                });
+                              },
+                              child: const Icon(CupertinoIcons.eye,
+                                  color: Color(0xFF8C8C8C)))
+                          : InkWell(
+                              onTap: () {
+                                setState(() {
+                                  passObscure = !passObscure;
+                                });
+                              },
+                              child: const Icon(
+                                CupertinoIcons.eye_slash,
+                                color: Color(0xFF8C8C8C),
+                              )),
+                      onFieldSubmitted: (_) {},
+                      inputType: TextInputType.emailAddress,
+                    ),
+                    CustomTextField(
+                      controller: _emailController,
+                      icon: Icons.email_outlined,
+                      validatorFn: emailValidator,
+                      hintText: 'Email',
+                      onChanged: (val) {},
+                      obscure: false,
+                      onFieldSubmitted: (_) {},
+                      inputType: TextInputType.emailAddress,
+                    ),
+                    CustomTextField(
+                      controller: _phoneController,
+                      icon: Icons.phone,
+                      obscure: false,
+                      validatorFn: phoneValidator,
+                      hintText: 'Phone',
+                      onChanged: (val) {},
+                      onFieldSubmitted: (_) {},
+                      inputType: TextInputType.phone,
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: size.height * 0.02),
 
               CustomButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, LoginScreen.routeName);
+                isLoading: _isLoading,
+                onPressed: () async {
+                  if (_emailController.text.isEmpty ||
+                      _passController.text.isEmpty ||
+                      _userNameController.text.isEmpty ||
+                      _phoneController.text.isEmpty) {
+                    showFlagMsg(
+                        context: context,
+                        msg: 'Enter all Fields',
+                        textColor: Colors.red);
+                    return null;
+                  }
+                  final form = signUpKey.currentState;
+                  if (form!.validate()) {
+                    form.save();
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    String res = await AuthMethods().signUpUser(
+                      email: _emailController.text,
+                      password: _passController.text,
+                      username: _userNameController.text,
+                      phoneNumber: _phoneController.text,
+                    );
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    if (res != 'success') {
+                      showFlagMsg(
+                          context: context, msg: res, textColor: Colors.red);
+                    } else {
+                      showToast('Account Created Successfully');
+                      Navigator.pushNamed(context, LoginScreen.routeName);
+                    }
+                  } else {
+                    showFlagMsg(
+                        context: context,
+                        msg: 'Required fields are missing',
+                        textColor: Colors.red);
+                  }
                 },
                 buttonText: 'Create',
                 fillColor: kPrimaryColor,

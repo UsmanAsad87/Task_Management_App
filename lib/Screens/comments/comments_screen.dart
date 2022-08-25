@@ -79,6 +79,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
                             width: 20.w,
                           ),
                           DropdownButton(
+                              dropdownColor: kTextFieldColor,
+                              borderRadius: BorderRadius.circular(12),
                               underline: SizedBox(),
                               value: searchModeValue,
                               //focusColor: Colors.white,

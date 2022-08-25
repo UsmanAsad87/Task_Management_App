@@ -158,22 +158,20 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
               ),
 
               //priority drop down
+
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
                   color: kTextFieldColor,
                 ),
+                padding: EdgeInsets.all(9.h),
                 height: 40.h,
                 width: 150.h,
-                child: DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide:
-                            BorderSide(color: Colors.black.withOpacity(0.1)),
-                      ),
-                    ),
+                child: DropdownButton(
+                    isExpanded: true,
+                    dropdownColor: kTextFieldColor,
+                    borderRadius: BorderRadius.circular(12),
+                    underline: SizedBox(),
                     value: priorityValue,
                     focusColor: Colors.white,
                     style: kDropDownStyle,
@@ -194,17 +192,14 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                   borderRadius: BorderRadius.circular(10.r),
                   color: kTextFieldColor,
                 ),
+                padding: EdgeInsets.all(9.h),
                 height: 40.h,
                 width: 150.h,
-                child: DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide:
-                            BorderSide(color: Colors.black.withOpacity(0.1)),
-                      ),
-                    ),
+                child: DropdownButton(
+                    isExpanded: true,
+                    dropdownColor: kTextFieldColor,
+                    borderRadius: BorderRadius.circular(12),
+                    underline: SizedBox(),
                     value: categoryValue,
                     focusColor: Colors.blue,
                     style: kDropDownStyle,
