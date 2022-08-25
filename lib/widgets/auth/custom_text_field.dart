@@ -11,6 +11,7 @@ class CustomTextField extends StatelessWidget {
   final Function(String) onFieldSubmitted;
   final TextInputType? inputType;
   final Widget? leadingIcon;
+  final String? Function(String?)? validatorFn;
   const CustomTextField({
     Key? key,
     required this.controller,
@@ -21,6 +22,7 @@ class CustomTextField extends StatelessWidget {
     required this.onFieldSubmitted,
     this.inputType,
     this.leadingIcon,
+    this.validatorFn,
   }) : super(key: key);
 
   @override
@@ -56,6 +58,7 @@ class CustomTextField extends StatelessWidget {
               : const SizedBox(),
           Expanded(
             child: TextFormField(
+              validator: validatorFn,
               obscureText: obscure,
               controller: controller,
               keyboardType: inputType,

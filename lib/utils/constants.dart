@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+const networkImageUrl =
+    'https://i.pinimg.com/originals/06/81/39/068139bff0b22024e775bfcbb42ed3b4.jpg';
 //const kPrimaryColor = Color(0xFF004064);
 const kPrimaryColor = Color(0xFFCDB369);
 const kSecondaryColor = Color(0xFF1D1D1D);

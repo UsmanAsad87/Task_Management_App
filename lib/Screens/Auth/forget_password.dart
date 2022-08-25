@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:task_management/Screens/Auth/change_password.dart';
+import 'package:task_management/Screens/Auth/login.dart';
+import 'package:task_management/resources/auth_methods.dart';
 import 'package:task_management/utils/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:task_management/utils/toast.dart';
+import 'package:task_management/utils/validator.dart';
 
 class ForgetPassword extends StatefulWidget {
   static const routeName = '/forget_pass';
@@ -15,6 +19,9 @@ class ForgetPassword extends StatefulWidget {
 class _ForgetPasswordState extends State<ForgetPassword> {
   final TextEditingController _emailController = TextEditingController();
   var obscure = true;
+  GlobalKey<FormState> forgetPassKey = GlobalKey<FormState>();
+
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -52,24 +59,28 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     padding: EdgeInsets.symmetric(vertical: 20.w),
                     child: Center(
                         child: Text(
-                      'Enter your email, you will recieve a to change your password',
+                      'Enter your email, you will receive a email to change your password',
                       style: kBodyStyle4a,
                       textAlign: TextAlign.center,
                     )),
                   ),
-                  SizedBox(
-                    width: 250.w,
-                    child: TextFormField(
-                      controller: _emailController,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        hintText: 'BeyondITsolution@gmail.com',
-                        hintStyle: kBodyStyle4a,
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
+                  Form(
+                    key: forgetPassKey,
+                    child: SizedBox(
+                      width: 250.w,
+                      child: TextFormField(
+                        validator: emailValidator,
+                        controller: _emailController,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          hintText: 'BeyondITsolution@gmail.com',
+                          hintStyle: kBodyStyle4a,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                        ),
+                        style: kBodyStyle4,
+                        onFieldSubmitted: (val) {},
                       ),
-                      style: kBodyStyle4,
-                      onFieldSubmitted: (val) {},
                     ),
                   ),
                   Padding(
@@ -89,8 +100,47 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               elevation: 2,
               fillColor: kPrimaryColor,
               //splashColor: Colors.greenAccent,
-              onPressed: () {
-                Navigator.pushNamed(context, ChangePassword.routeName);
+              onPressed: () async {
+                if (_emailController.text.isEmpty) {
+                  showFlagMsg(
+                      context: context,
+                      msg: 'Enter the email',
+                      textColor: Colors.red);
+                  return null;
+                }
+                final form = forgetPassKey.currentState;
+                if (form!.validate()) {
+                  setState(() {
+                    _isLoading = true;
+                  });
+                  String res = await AuthMethods()
+                      .resetPassword(email: _emailController.text);
+                  if (res == "success") {
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    showToast('Reset password email is sent.');
+                    await Future.delayed(Duration(milliseconds: 2000), () {})
+                        .then((value) => Navigator.pushNamed(
+                            context, LoginScreen.routeName));
+                  } else {
+                    showFlagMsg(
+                        context: context, msg: res, textColor: Colors.red);
+                  }
+                  setState(() {
+                    _isLoading = false;
+                  });
+
+                  // Navigator.of(context).push(MaterialPageRoute(
+                  //     builder: (_) => ChangePassword(
+                  //           email: _emailController.text,
+                  //         )));
+                } else {
+                  showFlagMsg(
+                      context: context,
+                      msg: 'Enter the proper email',
+                      textColor: Colors.red);
+                }
               },
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.r),

@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:task_management/Screens/Auth/change_password.dart';
+import 'package:task_management/Screens/settings/change_profile_screen.dart';
+import 'package:task_management/Screens/settings/change_usrename.dart';
+import 'package:task_management/resources/auth_methods.dart';
 import 'package:task_management/utils/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -54,7 +58,9 @@ class _SettingScreenState extends State<SettingScreen> {
                       color: kWhiteColor.withOpacity(0.38),
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, ChangePassword.routeName);
+                      },
                       child: ListTile(
                           title: Text(
                             'Change Password',
@@ -73,7 +79,12 @@ class _SettingScreenState extends State<SettingScreen> {
                       color: kWhiteColor.withOpacity(0.09),
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const UpdateUsername()));
+                      },
                       child: ListTile(
                           title: Text(
                             'Change Username',
@@ -131,7 +142,10 @@ class _SettingScreenState extends State<SettingScreen> {
                       color: kWhiteColor.withOpacity(0.09),
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => ChangeProfileScreen()));
+                      },
                       child: ListTile(
                           title: Text(
                             'Change Profile Picture',
@@ -141,6 +155,24 @@ class _SettingScreenState extends State<SettingScreen> {
                             CupertinoIcons.person_circle,
                             color: kWhiteColor,
                           )),
+                    ),
+                    Container(
+                      height: 0.5.h,
+                      margin:
+                          EdgeInsets.symmetric(vertical: 0.h, horizontal: 10.w),
+                      width: double.infinity,
+                      color: kWhiteColor.withOpacity(0.09),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        AuthMethods().signOut();
+                      },
+                      child: ListTile(
+                        title: Text(
+                          'Logout',
+                          style: kBodyStyle15,
+                        ),
+                      ),
                     ),
                   ],
                 ),

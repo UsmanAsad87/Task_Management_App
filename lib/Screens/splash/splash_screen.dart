@@ -18,11 +18,12 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    _navigateToLogin();
+
     animationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 2000));
     animation = IntTween(begin: 0, end: 1000).animate(animationController!);
     animationController!.forward();
+    _navigateToLogin();
   }
 
   @override
@@ -32,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   _navigateToLogin() async {
-    await Future.delayed(Duration(milliseconds: 2000), () {});
+    await Future.delayed(Duration(milliseconds: 3000), () {});
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => const LoginScreen()));
   }
@@ -63,25 +64,6 @@ class _SplashScreenState extends State<SplashScreen>
                   value: (animation!.value) / 100.0,
                 ),
               )
-              /*Row(
-                children: [
-                  Center(
-                    child: Container(
-                      width: 267.h,
-                      //alignment: Alignment.center,
-                      //padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: LinearPercentIndicator(
-                        //padding: EdgeInsets.symmetric(horizontal: 20.w),
-                        width: 200.0.w,
-                        lineHeight: 5.0.h,
-                        percent: 0.5,
-                        progressColor: kProgressColor,
-                        barRadius: Radius.circular(20.r),
-                      ),
-                    ),
-                  ),
-                ],
-              ),*/
             ],
           ),
         ));

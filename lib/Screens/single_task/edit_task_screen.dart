@@ -135,27 +135,24 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                 onFieldSubmitted: (val) {},
                 maxLines: 2,
               ),
+
               const HeadingText(
                 title: 'Priority *',
               ),
-
               //priority drop down
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
                   color: kTextFieldColor,
                 ),
+                padding: EdgeInsets.all(9.h),
                 height: 40.h,
                 width: 150.h,
-                child: DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide:
-                            BorderSide(color: Colors.black.withOpacity(0.1)),
-                      ),
-                    ),
+                child: DropdownButton(
+                    isExpanded: true,
+                    dropdownColor: kTextFieldColor,
+                    borderRadius: BorderRadius.circular(12),
+                    underline: SizedBox(),
                     value: priorityValue,
                     focusColor: Colors.white,
                     style: kDropDownStyle,
@@ -170,25 +167,22 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               const HeadingText(
                 title: 'Select Category *',
               ),
-              //priority drop down
+              //category drop down
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
                   color: kTextFieldColor,
                 ),
+                padding: EdgeInsets.all(9.h),
                 height: 40.h,
                 width: 150.h,
-                child: DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide:
-                            BorderSide(color: Colors.black.withOpacity(0.1)),
-                      ),
-                    ),
+                child: DropdownButton(
+                    isExpanded: true,
+                    dropdownColor: kTextFieldColor,
+                    borderRadius: BorderRadius.circular(12),
+                    underline: SizedBox(),
                     value: categoryValue,
-                    focusColor: Colors.white,
+                    focusColor: Colors.blue,
                     style: kDropDownStyle,
                     onChanged: (String? newValue) {
                       setState(() {
@@ -197,6 +191,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     },
                     items: categoryItems),
               ),
+
               const HeadingText(
                 title: 'Attach Files',
               ),

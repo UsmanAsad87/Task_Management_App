@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:task_management/Screens/Auth/forget_password.dart';
 import 'package:task_management/Screens/Auth/signup.dart';
 import 'package:task_management/Screens/Home/home_screen.dart';
+import 'package:task_management/resources/auth_methods.dart';
 import 'package:task_management/utils/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:task_management/utils/loader.dart';
+import 'package:task_management/utils/toast.dart';
+import 'package:task_management/utils/validator.dart';
 import 'package:task_management/widgets/auth/custom_button.dart';
 import 'package:task_management/widgets/auth/custom_text_field.dart';
 
@@ -21,6 +25,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   var obscure = true;
+  GlobalKey<FormState> loginInKey = GlobalKey<FormState>();
+
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -79,45 +86,56 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(height: size.height * 0.03),
-              CustomTextField(
-                controller: _emailController,
-                icon: Icons.email_outlined,
-                hintText: 'Enter your Email',
-                onChanged: (val) {},
-                obscure: false,
-                onFieldSubmitted: (_) {},
-                inputType: TextInputType.emailAddress,
+
+              Form(
+                key: loginInKey,
+                child: Column(
+                  children: [
+                    CustomTextField(
+                      controller: _emailController,
+                      icon: Icons.email_outlined,
+                      validatorFn: emailValidator,
+                      hintText: 'Enter your Email',
+                      onChanged: (val) {},
+                      obscure: false,
+                      onFieldSubmitted: (_) {},
+                      inputType: TextInputType.emailAddress,
+                    ),
+                    CustomTextField(
+                      controller: _passController,
+                      icon: Icons.lock_outline,
+                      hintText: 'Password',
+                      validatorFn: passValidator,
+                      onChanged: (val) {},
+                      obscure: obscure,
+                      leadingIcon: obscure == false
+                          ? InkWell(
+                              onTap: () {
+                                setState(() {
+                                  obscure = !obscure;
+                                });
+                              },
+                              child: const Icon(CupertinoIcons.eye,
+                                  color: Color(0xFF8C8C8C)))
+                          : InkWell(
+                              onTap: () {
+                                setState(() {
+                                  obscure = !obscure;
+                                });
+                              },
+                              child: const Icon(
+                                CupertinoIcons.eye_slash,
+                                color: Color(0xFF8C8C8C),
+                              )),
+                      onFieldSubmitted: (_) {},
+                      inputType: TextInputType.emailAddress,
+                    ),
+                  ],
+                ),
               ),
-              CustomTextField(
-                controller: _passController,
-                icon: Icons.lock_outline,
-                hintText: 'Password',
-                onChanged: (val) {},
-                obscure: obscure,
-                leadingIcon: obscure == false
-                    ? InkWell(
-                        onTap: () {
-                          setState(() {
-                            obscure = !obscure;
-                          });
-                        },
-                        child: const Icon(CupertinoIcons.eye,
-                            color: Color(0xFF8C8C8C)))
-                    : InkWell(
-                        onTap: () {
-                          setState(() {
-                            obscure = !obscure;
-                          });
-                        },
-                        child: const Icon(
-                          CupertinoIcons.eye_slash,
-                          color: Color(0xFF8C8C8C),
-                        )),
-                onFieldSubmitted: (_) {},
-                inputType: TextInputType.emailAddress,
-              ),
+
               InkWell(
-                onTap: () {
+                onTap: () async {
                   Navigator.pushNamed(context, ForgetPassword.routeName);
                 },
                 child: Align(
@@ -133,8 +151,44 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: size.height * 0.03),
 
               CustomButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+                isLoading: _isLoading,
+                onPressed: () async {
+                  if (_emailController.text.isEmpty ||
+                      _passController.text.isEmpty) {
+                    showFlagMsg(
+                        context: context,
+                        msg: 'Enter all Fields',
+                        textColor: Colors.red);
+                    return null;
+                  }
+                  final form = loginInKey.currentState;
+                  if (form!.validate()) {
+                    form.save();
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    String res = await AuthMethods().loginUser(
+                        email: _emailController.text,
+                        password: _passController.text);
+                    if (res == "success") {
+                      setState(() {
+                        _isLoading = false;
+                      });
+                      Navigator.pushReplacementNamed(
+                          context, HomeScreen.routeName);
+                    } else {
+                      showFlagMsg(
+                          context: context, msg: res, textColor: Colors.red);
+                    }
+                    setState(() {
+                      _isLoading = false;
+                    });
+                  } else {
+                    showFlagMsg(
+                        context: context,
+                        msg: 'Required fields are missing',
+                        textColor: Colors.red);
+                  }
                 },
                 buttonText: 'Login',
                 fillColor: kPrimaryColor,

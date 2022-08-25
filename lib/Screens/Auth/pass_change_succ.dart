@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_management/Screens/Auth/login.dart';
+import 'package:task_management/resources/auth_methods.dart';
 import 'package:task_management/utils/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -50,8 +51,7 @@ class _PassChangeSuccessfulState extends State<PassChangeSuccessful> {
                   fillColor: kPrimaryColor,
                   //splashColor: Colors.greenAccent,
                   onPressed: () {
-                    Navigator.pushReplacementNamed(
-                        context, LoginScreen.routeName);
+                    AuthMethods().signOut();
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.r),

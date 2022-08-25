@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:task_management/Screens/Home/all_projects.dart';
 import 'package:task_management/Screens/Home/completed_projects.dart';
 import 'package:task_management/Screens/Home/pending_projects.dart';
@@ -8,6 +9,8 @@ import 'package:task_management/Screens/history/history.dart';
 import 'package:task_management/Screens/notification/notification.dart';
 import 'package:task_management/Screens/settings/setting_screen.dart';
 import 'package:task_management/Screens/single_task/create_task_screen.dart';
+import 'package:task_management/model/UserModel.dart';
+import 'package:task_management/provider/user_provider.dart';
 import 'package:task_management/utils/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:task_management/widgets/homeScreen/tab_bar_material_widget.dart';
@@ -35,9 +38,15 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void initState() {
+    addData();
     _horizontalScrollController = ScrollController();
     _tabController = TabController(length: tabNames.length, vsync: this);
     super.initState();
+  }
+
+  addData() async {
+    UserProvider _userProvider = Provider.of(context, listen: false);
+    await _userProvider.refreshUser();
   }
 
   buildTabRow(context) {
@@ -116,16 +125,20 @@ class _HomeScreenState extends State<HomeScreen>
                 }));
         break;
       case 3:
-        Navigator.pushNamed(context, SettingScreen.routeName)
-            .then((value) => setState(() {
-                  this.index = 0;
-                }));
+        Navigator.pushNamed(context, SettingScreen.routeName).then((value) {
+          if (mounted) {
+            setState(() {
+              this.index = 0;
+            });
+          }
+        });
         break;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final UserModel user = Provider.of<UserProvider>(context).getUser;
     return DefaultTabController(
       length: tabNames.length,
       child: Scaffold(
@@ -152,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen>
                   title: Row(
                     children: [
                       Text(
-                        'Hi Beyond',
+                        'Hi ${user.name}',
                         style: GoogleFonts.poppins(
                             color: kWhiteFontColor,
                             fontSize: 16.sp,
@@ -171,10 +184,13 @@ class _HomeScreenState extends State<HomeScreen>
                     'Good Afternoon',
                     style: kBodyStyle11,
                   ),
-                  leading: const CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        'https://i.pinimg.com/originals/06/81/39/068139bff0b22024e775bfcbb42ed3b4.jpg'),
-                  ),
+                  leading: user.profilePic.isEmpty
+                      ? const CircleAvatar(
+                          backgroundImage: NetworkImage(networkImageUrl),
+                        )
+                      : CircleAvatar(
+                          backgroundImage: NetworkImage(user.profilePic),
+                        ),
                   trailing: SizedBox(
                     width: 70.w,
                     child: Row(
@@ -225,6 +241,9 @@ class _HomeScreenState extends State<HomeScreen>
                     right: kDefaultPadding),
                 child: Column(
                   children: [
+                    SizedBox(
+                      height: 10.h,
+                    ),
                     //Your Projects Title
                     Align(
                       alignment: Alignment.topLeft,
