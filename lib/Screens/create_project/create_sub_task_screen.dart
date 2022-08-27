@@ -1,9 +1,22 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:task_management/model/TaskModel.dart';
+import 'package:task_management/model/UserModel.dart';
+import 'package:task_management/provider/task_provider.dart';
+import 'package:task_management/provider/user_provider.dart';
+import 'package:task_management/resources/task_methods.dart';
 import 'package:task_management/utils/constants.dart';
 import "package:date_picker_timeline/date_picker_timeline.dart";
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:task_management/utils/loader.dart';
+import 'package:task_management/utils/toast.dart';
 import 'package:task_management/widgets/commons/custom_create_button.dart';
 import 'package:task_management/widgets/commons/custom_create_text_field.dart';
+import 'package:task_management/widgets/single_task/attached_file.dart';
+import 'package:uuid/uuid.dart';
 
 class CreateSubTaskScreen extends StatefulWidget {
   static const routeName = '/create_sub_task';
@@ -14,9 +27,14 @@ class CreateSubTaskScreen extends StatefulWidget {
 }
 
 class _CreateSubTaskScreenState extends State<CreateSubTaskScreen> {
-  late DateTime _selectedValue;
+  late DateTime _selectedDueDate;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
+
+  bool isUploading = false;
+  List<FileModel>? uploadFiles = [];
+
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -39,9 +57,26 @@ class _CreateSubTaskScreenState extends State<CreateSubTaskScreen> {
     DropdownMenuItem(child: Text("Design 3"), value: "Design 3"),
     DropdownMenuItem(child: Text("Design 4"), value: "Design 4"),
   ];
+  Future selectFile() async {
+    setState(() {
+      isUploading = true;
+    });
+    final result = await FilePicker.platform.pickFiles();
+    if (result == null) {
+      return;
+    }
+    final file = File(result.files.first.path!);
+    final fileName = result.files.first.name;
+    String fileUrl = await TaskMethods().uploadFile(file, fileName);
+    uploadFiles?.add(FileModel(fileName: fileName, fileUrl: fileUrl));
+    setState(() {
+      isUploading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final UserModel user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       backgroundColor: kSecondaryColor,
       appBar: AppBar(
@@ -94,7 +129,7 @@ class _CreateSubTaskScreenState extends State<CreateSubTaskScreen> {
                     width: 50.w,
                     onDateChange: (date) {
                       setState(() {
-                        _selectedValue = date;
+                        _selectedDueDate = date;
                       });
                     },
                   ),
@@ -129,30 +164,27 @@ class _CreateSubTaskScreenState extends State<CreateSubTaskScreen> {
                 onFieldSubmitted: (val) {},
                 maxLines: 2,
               ),
+
+              //priority drop down
               const HeadingText(
                 title: 'Priority *',
               ),
-
-              //priority drop down
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
                   color: kTextFieldColor,
                 ),
+                padding: EdgeInsets.all(9.h),
                 height: 40.h,
                 width: 150.h,
-                child: DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide:
-                            BorderSide(color: Colors.black.withOpacity(0.1)),
-                      ),
-                    ),
+                child: DropdownButton(
+                    isExpanded: true,
+                    dropdownColor: kTextFieldColor,
+                    borderRadius: BorderRadius.circular(12),
+                    underline: SizedBox(),
                     value: priorityValue,
                     focusColor: Colors.white,
-                    style: kBodyStyle6,
+                    style: kDropDownStyle,
                     onChanged: (String? newValue) {
                       setState(() {
                         priorityValue = newValue!;
@@ -161,29 +193,26 @@ class _CreateSubTaskScreenState extends State<CreateSubTaskScreen> {
                     items: prioirityItems),
               ),
 
+              //Category drop down
               const HeadingText(
                 title: 'Select Category *',
               ),
-              //priority drop down
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
                   color: kTextFieldColor,
                 ),
+                padding: EdgeInsets.all(9.h),
                 height: 40.h,
                 width: 150.h,
-                child: DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.fromLTRB(10.w, 0, 10.w, 0),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide:
-                            BorderSide(color: Colors.black.withOpacity(0.1)),
-                      ),
-                    ),
+                child: DropdownButton(
+                    isExpanded: true,
+                    dropdownColor: kTextFieldColor,
+                    borderRadius: BorderRadius.circular(12),
+                    underline: SizedBox(),
                     value: categoryValue,
-                    focusColor: Colors.white,
-                    style: kBodyStyle6,
+                    focusColor: Colors.blue,
+                    style: kDropDownStyle,
                     onChanged: (String? newValue) {
                       setState(() {
                         categoryValue = newValue!;
@@ -191,6 +220,7 @@ class _CreateSubTaskScreenState extends State<CreateSubTaskScreen> {
                     },
                     items: categoryItems),
               ),
+
               const HeadingText(
                 title: 'Attach Files',
               ),
@@ -199,7 +229,7 @@ class _CreateSubTaskScreenState extends State<CreateSubTaskScreen> {
                 elevation: 0,
                 fillColor: kTextFieldColor,
                 //splashColor: Colors.greenAccent,
-                onPressed: () {},
+                onPressed: selectFile,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.r),
                 ),
@@ -208,35 +238,81 @@ class _CreateSubTaskScreenState extends State<CreateSubTaskScreen> {
                   width: 120.w,
                   child: Padding(
                     padding: EdgeInsets.all(8.0.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.upload_outlined,
-                            color: Color(0xFFBFBFBF)),
-                        Padding(
-                          padding: EdgeInsets.only(left: 10.0.w),
-                          child: Text(
-                            'Upload',
-                            style: kBodyStyle6,
+                    child: isUploading
+                        ? spinKit()
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.upload_outlined,
+                                  color: Color(0xFFBFBFBF)),
+                              Padding(
+                                padding: EdgeInsets.only(left: 10.0.w),
+                                child: Text(
+                                  'Upload',
+                                  style: kBodyStyle6,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               ),
               SizedBox(height: 20.h),
+              if (uploadFiles!.isNotEmpty)
+                SizedBox(
+                  height: 80.h,
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemCount: uploadFiles!.length,
+                      itemBuilder: (context, index) {
+                        return AttachedFile(
+                          filename: uploadFiles![index].fileName!,
+                        );
+                      }),
+                ),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CustomCreateButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pop(context, false);
+                      },
                       buttonText: 'Cancel',
                       fillColor: kSecondaryColor),
                   CustomCreateButton(
-                      onPressed: () {
-                        Navigator.pop(context);
+                      onPressed: () async {
+                        if (_titleController.text.isEmpty ||
+                            _descController.text.isEmpty ||
+                            _selectedDueDate == null) {
+                          showFlagMsg(
+                              context: context,
+                              msg: 'Required fields are missing',
+                              textColor: Colors.red);
+                          return null;
+                        }
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        var taskId = const Uuid().v4();
+                        TaskModel task = TaskModel(
+                            taskId: taskId,
+                            userId: user.uid,
+                            createdDateTime: DateTime.now(),
+                            dueDateTime: _selectedDueDate,
+                            title: _titleController.text,
+                            description: _descController.text,
+                            priorityValue: priorityValue,
+                            categoryValue: categoryValue,
+                            files: uploadFiles,
+                            isPending: true);
+                        setState(() {
+                          _isLoading = false;
+                        });
+                        Provider.of<TaskProvider>(context, listen: false)
+                            .setSubTask = task;
+                        Navigator.pop(context, true);
                       },
                       buttonText: 'Done',
                       fillColor: kPrimaryColor)

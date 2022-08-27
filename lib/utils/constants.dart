@@ -4,10 +4,24 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const networkImageUrl =
     'https://i.pinimg.com/originals/06/81/39/068139bff0b22024e775bfcbb42ed3b4.jpg';
+
+const List<String> imgUrl = [
+  'assets/icons/graphicDesign.png',
+  'assets/icons/web.png',
+  'assets/icons/app.png'
+];
+const List<Color> cardColor = [
+  kPrimaryColor,
+  Colors.green,
+  Colors.blue,
+  Color(0xFF4F283D)
+];
 //const kPrimaryColor = Color(0xFF004064);
 const kPrimaryColor = Color(0xFFCDB369);
 const kSecondaryColor = Color(0xFF1D1D1D);
 const kSecondaryColor2 = Color(0xFF1B1B1B);
+
+const constTaskId = 'fadc1572-be6b-4f7b-b1af-e3c4574a9a45';
 
 const kWhiteColor = Color(0xFFFFFFFF);
 const kWhiteFontColor = Color(0xFFFFFFFF);
@@ -112,3 +126,18 @@ final kDropDownStyle = GoogleFonts.poppins(
     fontWeight: FontWeight.w400);
 
 final kDefaultPadding = 20.0.h;
+
+List<String> months = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec'
+];

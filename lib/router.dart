@@ -77,9 +77,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case SingleTaskScreen.routeName:
       return MaterialPageRoute(
-        builder: (context) => const SingleTaskScreen(
-          title: 'Management App Design',
-        ),
+        builder: (context) => const SingleTaskScreen(),
       );
     case EditTaskScreen.routeName:
       return MaterialPageRoute(
@@ -87,15 +85,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case ProjectScreen.routeName:
       return MaterialPageRoute(
-        builder: (context) => const ProjectScreen(
-          title: 'Web Development',
-        ),
+        builder: (context) => const ProjectScreen(),
       );
     case SingleProjectScreen.routeName:
       return MaterialPageRoute(
-        builder: (context) => const SingleProjectScreen(
-          title: 'Management App Design',
-        ),
+        builder: (context) => const SingleProjectScreen(),
       );
     case EditProjectScreen.routeName:
       return MaterialPageRoute(

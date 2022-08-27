@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:provider/provider.dart';
 import 'package:task_management/Screens/projects/project.dart';
+import 'package:task_management/provider/project_provider.dart';
 import 'package:task_management/utils/constants.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,6 +14,7 @@ class ProjectCard extends StatelessWidget {
   final String projectTitle;
   final int noOfComments;
   final bool isCompleted;
+  final String projectId;
 
   const ProjectCard({
     Key? key,
@@ -20,35 +23,35 @@ class ProjectCard extends StatelessWidget {
     required this.projectTitle,
     required this.noOfComments,
     required this.isCompleted,
+    required this.projectId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
+    return GestureDetector(
+      onTap: () async {
+        ProjectProvider projectProvider = Provider.of(context, listen: false);
+        await projectProvider.refreshSelectedProject(projectId);
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProjectScreen(
-              title: projectTitle,
-              isPending: !isCompleted,
-            ),
+            builder: (context) => ProjectScreen(),
           ),
         );
       },
-      child: Stack(
-        children: [
-          Container(
-            height: 165.h,
-            width: 165.w,
-            margin: EdgeInsets.only(top: 10.h, right: 10.w),
-            padding: EdgeInsets.only(
-                top: 18.h, bottom: 12.h, left: 13.w, right: 13.w),
-            decoration: BoxDecoration(
-              color: cardColor,
-              borderRadius: BorderRadius.circular(25.0.r),
-            ),
-            child: Column(
+      child: Container(
+        height: 165.h,
+        width: 165.w,
+        margin: EdgeInsets.only(top: 10.h, right: 10.w),
+        padding:
+            EdgeInsets.only(top: 18.h, bottom: 12.h, left: 13.w, right: 13.w),
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(25.0.r),
+        ),
+        child: Stack(
+          children: [
+            Column(
               children: [
                 Row(
                   children: [
@@ -138,33 +141,34 @@ class ProjectCard extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          Positioned(
-            right: 25,
-            bottom: 15,
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Container(
-                height: 18.h,
-                width: 60.w,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6.r),
-                  color: isCompleted
-                      ? const Color(0xFF009B06)
-                      : const Color(0xFF252525),
-                ),
-                child: Center(
-                    child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
-                  child: Text(
-                    isCompleted ? 'Completed' : 'Pending',
-                    style: kBodyStyle12,
+            Positioned(
+              right: 0,
+              bottom: 0,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Container(
+                  height: 18.h,
+                  width: 60.w,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6.r),
+                    color: isCompleted
+                        ? const Color(0xFF009B06)
+                        : const Color(0xFF252525),
                   ),
-                )),
+                  child: Center(
+                      child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
+                    child: Text(
+                      isCompleted ? 'Completed' : 'Pending',
+                      style: kBodyStyle12,
+                    ),
+                  )),
+                ),
               ),
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -27,7 +27,7 @@ class CustomSmallButton extends StatelessWidget {
         child: SizedBox(
           height: 33.h,
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 24.w),
+            padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 20.w),
             child: Text(
               buttonText,
               style: GoogleFonts.poppins(

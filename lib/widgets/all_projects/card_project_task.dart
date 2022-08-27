@@ -1,36 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:task_management/Screens/single_task/edit_task_screen.dart';
 import 'package:task_management/Screens/single_task/single_task_screen.dart';
+import 'package:task_management/model/TaskModel.dart';
 import 'package:task_management/utils/constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CardProjectTask extends StatelessWidget {
-  final String projectTitle;
-  final String projectType;
-  final int noOfComments;
-  final bool isPending;
+import '../../provider/task_provider.dart';
+
+class CardProjectTask extends StatefulWidget {
+  final TaskModel task;
 
   const CardProjectTask({
     Key? key,
-    required this.projectTitle,
-    required this.projectType,
-    required this.noOfComments,
-    required this.isPending,
+    required this.task,
   }) : super(key: key);
 
   @override
+  State<CardProjectTask> createState() => _CardProjectTaskState();
+}
+
+class _CardProjectTaskState extends State<CardProjectTask> {
+  int comments = 0;
+  @override
   Widget build(BuildContext context) {
+    if (widget.task.comments?.length != null) {
+      comments = widget.task.comments!.length;
+    }
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 12.0.h),
       child: InkWell(
         onTap: () {
+          Provider.of<TaskProvider>(context, listen: false).setSubTask =
+              widget.task;
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => SingleTaskScreen(
-                        title: projectTitle,
-                        isPending: isPending,
-                      )));
+            context,
+            MaterialPageRoute(
+              builder: (_) => const SingleTaskScreen(
+                isProjectTask: true,
+              ),
+            ),
+          );
         },
         child: Container(
           height: 75.h,
@@ -38,7 +48,7 @@ class CardProjectTask extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(projectType, style: kBodyStyle1),
+              Text(widget.task.categoryValue, style: kBodyStyle1),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 2.h),
                 child: Row(
@@ -46,12 +56,16 @@ class CardProjectTask extends StatelessWidget {
                   children: [
                     SizedBox(
                         width: MediaQuery.of(context).size.width / 2,
-                        child: Text(projectTitle, style: kBodyStyle2)),
-                    isPending
+                        child: Text(widget.task.title, style: kBodyStyle2)),
+                    widget.task.isPending
                         ? InkWell(
                             onTap: () {
-                              Navigator.pushNamed(
-                                  context, EditTaskScreen.routeName);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => EditTaskScreen(
+                                            isProjectTask: true,
+                                          )));
                             },
                             child: const Icon(
                               Icons.edit_outlined,
@@ -98,7 +112,7 @@ class CardProjectTask extends StatelessWidget {
                         ],
                       ),
                       Text(
-                        '$noOfComments comments',
+                        '$comments comments',
                         style: kBodyStyle11,
                       ),
                     ],
@@ -127,13 +141,13 @@ class CardProjectTask extends StatelessWidget {
                         width: 52.w,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(3.r),
-                          color: isPending
+                          color: widget.task.isPending
                               ? const Color(0xFF1D95E9)
                               : const Color(0xFF499B0D),
                         ),
                         child: Center(
                           child: Text(
-                            isPending ? 'Pending' : 'Completed',
+                            widget.task.isPending ? 'Pending' : 'Completed',
                             style: kBodyStyle10,
                           ),
                         ),

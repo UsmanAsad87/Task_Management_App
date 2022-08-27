@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:task_management/Screens/projects/project.dart';
+import 'package:task_management/provider/project_provider.dart';
 import 'package:task_management/utils/constants.dart';
 
 class CardHistoryProject extends StatelessWidget {
@@ -11,6 +13,7 @@ class CardHistoryProject extends StatelessWidget {
   final String imagePath;
   final Color imageBgColor;
   final int subTasks;
+  final String projectId;
   const CardHistoryProject({
     Key? key,
     required this.title,
@@ -18,6 +21,7 @@ class CardHistoryProject extends StatelessWidget {
     required this.imagePath,
     required this.imageBgColor,
     required this.subTasks,
+    required this.projectId,
   }) : super(key: key);
 
   @override
@@ -25,14 +29,13 @@ class CardHistoryProject extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: InkWell(
-        onTap: () {
+        onTap: () async {
+          ProjectProvider projectProvider = Provider.of(context, listen: false);
+          await projectProvider.refreshSelectedProject(projectId);
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProjectScreen(
-                title: title,
-                isPending: false,
-              ),
+              builder: (context) => ProjectScreen(),
             ),
           );
         },
