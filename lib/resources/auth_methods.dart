@@ -117,42 +117,6 @@ class AuthMethods {
     return res;
   }
 
-//   Future<String> ChangePassword({
-//  required String email,
-//  required   String oldPass,
-//  required   String newPass,
-// }) async{
-//     final user = FirebaseAuth.instance.currentUser;
-//     AuthCredential credential = EmailAuthProvider.credential(email: email,password: oldPass);
-//
-//     user?.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
-//     @Override
-//     public void onComplete(@NonNull Task<Void> task) {
-//     if(task.isSuccessful()){
-//     user.updatePassword(newPass).addOnCompleteListener(new OnCompleteListener<Void>() {
-//     @Override
-//     public void onComplete(@NonNull Task<Void> task) {
-//     if(!task.isSuccessful()){
-//     Snackbar snackbar_fail = Snackbar
-//         .make(coordinatorLayout, "Something went wrong. Please try again later", Snackbar.LENGTH_LONG);
-//     snackbar_fail.show();
-//     }else {
-//     Snackbar snackbar_su = Snackbar
-//         .make(coordinatorLayout, "Password Successfully Modified", Snackbar.LENGTH_LONG);
-//     snackbar_su.show();
-//     }
-//     }
-//     });
-//     }else {
-//     Snackbar snackbar_su = Snackbar
-//         .make(coordinatorLayout, "Authentication Failed", Snackbar.LENGTH_LONG);
-//     snackbar_su.show();
-//     }
-//     }
-//     });
-//   }
-// }
-// }
   Future<String> changePassword(
       String currentPassword, String newPassword) async {
     String res = 'Some Error Occurred';

@@ -112,17 +112,23 @@ class _HomeScreenState extends State<HomeScreen>
         //Navigator.pushNamed(context, HomeScreen.routeName);
         break;
       case 1:
-        Navigator.pushNamed(context, ChatScreen.routeName)
-            .then((value) => setState(() {
-                  this.index = 0;
-                }));
+        Navigator.pushNamed(context, ChatScreen.routeName).then((value) {
+          if (mounted) {
+            setState(() {
+              this.index = 0;
+            });
+          }
+        });
 
         break;
       case 2:
-        Navigator.pushNamed(context, HistoryScreen.routeName)
-            .then((value) => setState(() {
-                  this.index = 0;
-                }));
+        Navigator.pushNamed(context, HistoryScreen.routeName).then((value) {
+          if (mounted) {
+            setState(() {
+              this.index = 0;
+            });
+          }
+        });
         break;
       case 3:
         Navigator.pushNamed(context, SettingScreen.routeName).then((value) {
@@ -160,6 +166,7 @@ class _HomeScreenState extends State<HomeScreen>
         ),
         body: SafeArea(
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
               ListTile(
                   title: Row(

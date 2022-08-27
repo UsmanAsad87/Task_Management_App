@@ -1,10 +1,20 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:task_management/Screens/projects/project.dart';
 import 'package:task_management/Screens/create_project/create_sub_task_screen.dart';
 import 'package:task_management/Screens/single_task/create_task_screen.dart';
+import 'package:task_management/model/ProjectModel.dart';
+import 'package:task_management/model/TaskModel.dart';
+import 'package:task_management/model/UserModel.dart';
+import 'package:task_management/provider/project_provider.dart';
+import 'package:task_management/provider/task_provider.dart';
+import 'package:task_management/provider/user_provider.dart';
+import 'package:task_management/resources/project_methods.dart';
 import 'package:task_management/utils/constants.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:task_management/utils/toast.dart';
 import 'package:task_management/widgets/commons/alert_dialog.dart';
 import 'package:task_management/widgets/commons/custom_create_button.dart';
 import 'package:task_management/widgets/commons/custom_create_text_field.dart';
@@ -22,6 +32,28 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
   late DateTime _selectedValue;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
+  List<FileModel>? uploadFiles = [];
+  bool _isLoading = false;
+  List<TaskModel> tasks = [];
+
+  showTaskCreatedDialog() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.transparent,
+            actions: [
+              AlertBox(
+                  text: 'You’ve successfully \n created a project',
+                  buttonText: 'View Project',
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(
+                        context, ProjectScreen.routeName);
+                  }),
+            ],
+          );
+        });
+  }
 
   @override
   void dispose() {
@@ -32,6 +64,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final UserModel user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       backgroundColor: kSecondaryColor,
       appBar: AppBar(
@@ -120,7 +153,20 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                   text: 'Create Sub Task',
                   height: 35.h,
                   onPress: () {
-                    Navigator.pushNamed(context, CreateSubTaskScreen.routeName);
+                    // Provider.of<ProjectProvider>(context, listen: false).projectTitle = _titleController.text;
+                    // Provider.of<ProjectProvider>(context, listen: false).projectDesc = _descController.text;
+                    Navigator.pushNamed(context, CreateSubTaskScreen.routeName)
+                        .then((value) {
+                      if (value == true) {
+                        TaskModel newTask =
+                            Provider.of<TaskProvider>(context, listen: false)
+                                .getSubTask;
+                        tasks.add(newTask);
+                        setState(() {});
+                        // _titleController.text=Provider.of<ProjectProvider>(context, listen: false).getProjectTitle;
+                        // _descController.text=Provider.of<ProjectProvider>(context, listen: false).getProjectDesc;
+                      }
+                    });
                   }),
               Container(
                 height: 1.h,
@@ -128,8 +174,23 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                 width: double.infinity,
                 color: kWhiteFontColor.withOpacity(0.38),
               ),
-              TaskTile(index: 1, title: 'Web Design', dateTime: DateTime.now()),
-              TaskTile(index: 2, title: 'Web Dev', dateTime: DateTime.now()),
+
+              if (tasks.isNotEmpty)
+                SizedBox(
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: tasks.length,
+                      itemBuilder: (context, index) {
+                        return TaskTile(
+                            index: index + 1,
+                            title: tasks[index].title,
+                            dateTime: tasks[index].dueDateTime);
+                      }),
+                ),
+
+              // TaskTile(index: 1, title: 'Web Design', dateTime: DateTime.now()),
+              // TaskTile(index: 2, title: 'Web Dev', dateTime: DateTime.now()),
+
               SizedBox(height: 20.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -139,24 +200,38 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                       buttonText: 'Cancel',
                       fillColor: kSecondaryColor),
                   CustomCreateButton(
-                      onPressed: () {
-                        showDialog(
+                      onPressed: () async {
+                        if (_titleController.text.isEmpty ||
+                            _descController.text.isEmpty) {
+                          showFlagMsg(
+                              context: context,
+                              msg: 'Required fields are missing',
+                              textColor: Colors.red);
+                          return null;
+                        }
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        String res = await ProjectMethods().createProject(
+                            userId: user.uid,
+                            title: _titleController.text,
+                            desc: _descController.text,
                             context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                backgroundColor: Colors.transparent,
-                                actions: [
-                                  AlertBox(
-                                      text:
-                                          'You’ve successfully \n created a project',
-                                      buttonText: 'View Project',
-                                      onPressed: () {
-                                        Navigator.pushReplacementNamed(
-                                            context, ProjectScreen.routeName);
-                                      }),
-                                ],
-                              );
-                            });
+                            tasks: tasks,
+                            uploadFiles: uploadFiles);
+                        setState(() {
+                          _isLoading = false;
+                        });
+                        if (res != 'success') {
+                          showFlagMsg(
+                              context: context,
+                              msg: res,
+                              textColor: Colors.red);
+                        } else {
+                          _titleController.text = '';
+                          _descController.text = '';
+                          showTaskCreatedDialog();
+                        }
                       },
                       buttonText: 'Done',
                       fillColor: kPrimaryColor)

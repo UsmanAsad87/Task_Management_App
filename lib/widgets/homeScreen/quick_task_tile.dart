@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:task_management/Screens/single_task/single_task_screen.dart';
+import 'package:task_management/provider/task_provider.dart';
 import 'package:task_management/utils/constants.dart';
 
 class QuickTaskTile extends StatelessWidget {
   final String taskTitle;
+  final String taskId;
   final String taskStatus;
   final String imagePath;
   final Color imageBgColor;
@@ -16,6 +19,7 @@ class QuickTaskTile extends StatelessWidget {
     required this.taskStatus,
     required this.imagePath,
     required this.imageBgColor,
+    required this.taskId,
   }) : super(key: key);
 
   @override
@@ -23,11 +27,11 @@ class QuickTaskTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: InkWell(
-        onTap: () {
+        onTap: () async {
+          TaskProvider taskProvider = Provider.of(context, listen: false);
+          await taskProvider.refreshSelectedTask(taskId);
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => SingleTaskScreen(title: taskTitle)));
+              context, MaterialPageRoute(builder: (_) => SingleTaskScreen()));
         },
         child: Container(
           height: 85.h,

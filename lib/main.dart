@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:task_management/Screens/Home/home_screen.dart';
+import 'package:task_management/provider/project_provider.dart';
+import 'package:task_management/provider/task_provider.dart';
 import 'package:task_management/provider/user_provider.dart';
 import 'package:task_management/utils/constants.dart';
 import 'package:task_management/utils/loader.dart';
@@ -29,6 +31,12 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => TaskProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProjectProvider(),
         ),
       ],
       child: ScreenUtilInit(

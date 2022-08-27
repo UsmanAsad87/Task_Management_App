@@ -1,28 +1,71 @@
+import 'dart:io';
 import 'dart:ui';
+import 'package:dio/dio.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:task_management/Screens/comments/comments_screen.dart';
 import 'package:task_management/Screens/create_project/edit_project_screen.dart';
+import 'package:task_management/model/ProjectModel.dart';
+import 'package:task_management/provider/project_provider.dart';
 import 'package:task_management/utils/constants.dart';
+import 'package:task_management/utils/loader.dart';
 import 'package:task_management/widgets/single_task/attached_file.dart';
 import 'package:task_management/widgets/single_task/custom_small_button.dart';
 import '../../widgets/commons/custom_create_button.dart';
 
 class SingleProjectScreen extends StatefulWidget {
-  final String title;
-  final bool isPending;
   static const routeName = '/single_project_screen';
-  const SingleProjectScreen(
-      {Key? key, required this.title, this.isPending = true})
-      : super(key: key);
+  const SingleProjectScreen({Key? key}) : super(key: key);
 
   @override
   _SingleProjectScreenState createState() => _SingleProjectScreenState();
 }
 
 class _SingleProjectScreenState extends State<SingleProjectScreen> {
+  bool _isFileLoading = false;
+
+  Future openFile({required String url, required String fileName}) async {
+    setState(() {
+      _isFileLoading = true;
+    });
+    final file = await downloadFile(url, fileName);
+    setState(() {
+      _isFileLoading = false;
+    });
+    if (file == null) return;
+    OpenFile.open(file.path);
+  }
+
+  Future<File?> downloadFile(String url, String name) async {
+    final appStorage = await getApplicationDocumentsDirectory();
+    final file = File('${appStorage.path}/$name');
+    try {
+      final response = await Dio().get(
+        url,
+        options: Options(
+            responseType: ResponseType.bytes,
+            followRedirects: false,
+            receiveTimeout: 0),
+      );
+
+      final raf = file.openSync(mode: FileMode.write);
+      raf.writeFromSync(response.data);
+      await raf.close();
+
+      return file;
+    } on Exception catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final ProjectModel project =
+        Provider.of<ProjectProvider>(context).getSelectedProject;
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: kPrimaryColor,
@@ -63,7 +106,7 @@ class _SingleProjectScreenState extends State<SingleProjectScreen> {
                         children: [
                           Expanded(
                             child: Text(
-                              widget.title,
+                              project.title,
                               style: kHeadingStyle3,
                             ),
                           ),
@@ -81,12 +124,12 @@ class _SingleProjectScreenState extends State<SingleProjectScreen> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Lorem ipsum dolor sit amet,consectetur adipiscing elit. Sed ut purus a neque varius Lorem ipsum dolor consectetur adipiscing elit. Sed ut purus a neque varius Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus a neque varius ',
+                        project.description,
                         style: kTextButtonInActiveStyle,
                       ),
                     ),
                     SizedBox(height: 20.h),
-                    if (!widget.isPending) ...[
+                    if (!project.isPending) ...[
                       Container(
                         alignment: Alignment.centerLeft,
                         padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -135,37 +178,48 @@ class _SingleProjectScreenState extends State<SingleProjectScreen> {
                       SizedBox(
                         height: 10.h,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Attachments',
-                            style: kBodyStyle13,
-                          ),
-                        ),
-                      ),
-                      SingleChildScrollView(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: const [
-                            AttachedFile(
-                              filename: '1.png',
-                            ),
-                            AttachedFile(
-                              filename: 'doc.docs',
-                            ),
-                            AttachedFile(
-                              filename: '1.png',
-                            ),
-                            AttachedFile(
-                              filename: '6.png',
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 20.h),
                     ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Attachments',
+                          style: kBodyStyle13,
+                        ),
+                      ),
+                    ),
+                    if (project.files!.isNotEmpty)
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          height: 70.h,
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: project.files!.length,
+                              itemBuilder: (context, index) {
+                                return AttachedFileButton(
+                                  onPress: () => openFile(
+                                      fileName: project.files![index].fileName!,
+                                      url: project.files![index].fileUrl!),
+                                  filename: project.files![index].fileName!,
+                                );
+                              }),
+                        ),
+                      ),
+                    if (_isFileLoading) spinKit(),
+                    if (project.files!.isEmpty)
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 20.0.w),
+                            child: Text(
+                              'No attached files yet',
+                              style: kTextButtonInActiveStyle,
+                            ),
+                          )),
+                    SizedBox(height: 20.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -176,7 +230,7 @@ class _SingleProjectScreenState extends State<SingleProjectScreen> {
                             },
                             buttonText: 'View Comments',
                             fillColor: kSecondaryColor),
-                        widget.isPending
+                        project.isPending
                             ? CustomCreateButton(
                                 onPressed: () {
                                   Navigator.pushNamed(

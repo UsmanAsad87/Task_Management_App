@@ -1,13 +1,26 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:task_management/Screens/create_project/create_project_screen.dart';
 import 'package:task_management/Screens/single_task/single_task_screen.dart';
+import 'package:task_management/model/TaskModel.dart';
+import 'package:task_management/model/UserModel.dart';
+import 'package:task_management/provider/task_provider.dart';
+import 'package:task_management/provider/user_provider.dart';
+import 'package:task_management/resources/task_methods.dart';
 import 'package:task_management/utils/constants.dart';
 import "package:date_picker_timeline/date_picker_timeline.dart";
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:task_management/utils/loader.dart';
+import 'package:task_management/utils/toast.dart';
 import 'package:task_management/widgets/commons/alert_dialog.dart';
 import 'package:task_management/widgets/commons/custom_create_button.dart';
 import 'package:task_management/widgets/commons/custom_create_text_field.dart';
 import 'package:task_management/widgets/commons/dotted_button.dart';
+import 'package:task_management/widgets/single_task/attached_file.dart';
 
 class CreateTaskScreen extends StatefulWidget {
   static const routeName = '/create_task';
@@ -18,9 +31,15 @@ class CreateTaskScreen extends StatefulWidget {
 }
 
 class _CreateTaskScreenState extends State<CreateTaskScreen> {
-  late DateTime _selectedValue;
+  late DateTime _selectedDueDate;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
+  PlatformFile? pickedFile;
+  List<FileModel>? uploadFiles = [];
+
+  bool _isLoading = false;
+
+  var isUploading = false;
 
   @override
   void dispose() {
@@ -44,8 +63,45 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
     DropdownMenuItem(child: Text("Design 4"), value: "Design 4"),
   ];
 
+  showTaskCreatedDialog() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.transparent,
+            actions: [
+              AlertBox(
+                  text: 'You’ve successfully \n created a task',
+                  buttonText: 'View Task',
+                  onPressed: () async {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (_) => SingleTaskScreen()));
+                  }),
+            ],
+          );
+        });
+  }
+
+  Future selectFile() async {
+    setState(() {
+      isUploading = true;
+    });
+    final result = await FilePicker.platform.pickFiles();
+    if (result == null) {
+      return;
+    }
+    final file = File(result.files.first.path!);
+    final fileName = result.files.first.name;
+    String fileUrl = await TaskMethods().uploadFile(file, fileName);
+    uploadFiles?.add(FileModel(fileName: fileName, fileUrl: fileUrl));
+    setState(() {
+      isUploading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final UserModel user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
       backgroundColor: kSecondaryColor,
       appBar: AppBar(
@@ -118,7 +174,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                     width: 50.w,
                     onDateChange: (date) {
                       setState(() {
-                        _selectedValue = date;
+                        _selectedDueDate = date;
                       });
                     },
                   ),
@@ -186,7 +242,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
               const HeadingText(
                 title: 'Select Category *',
               ),
-              //priority drop down
+              //category drop down
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
@@ -210,6 +266,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                     },
                     items: categoryItems),
               ),
+
               const HeadingText(
                 title: 'Attach Files',
               ),
@@ -218,7 +275,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                 elevation: 0,
                 fillColor: kTextFieldColor,
                 //splashColor: Colors.greenAccent,
-                onPressed: () {},
+                onPressed: selectFile,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.r),
                 ),
@@ -227,24 +284,39 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                   width: 120.w,
                   child: Padding(
                     padding: EdgeInsets.all(8.0.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.upload_outlined,
-                            color: Color(0xFFBFBFBF)),
-                        Padding(
-                          padding: EdgeInsets.only(left: 10.0.w),
-                          child: Text(
-                            'Upload',
-                            style: kBodyStyle6,
+                    child: isUploading
+                        ? spinKit()
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.upload_outlined,
+                                  color: Color(0xFFBFBFBF)),
+                              Padding(
+                                padding: EdgeInsets.only(left: 10.0.w),
+                                child: Text(
+                                  'Upload',
+                                  style: kBodyStyle6,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               ),
               SizedBox(height: 20.h),
+              if (uploadFiles!.isNotEmpty)
+                SizedBox(
+                  height: 80.h,
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemCount: uploadFiles!.length,
+                      itemBuilder: (context, index) {
+                        return AttachedFile(
+                          filename: uploadFiles![index].fileName!,
+                        );
+                      }),
+                ),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -254,24 +326,42 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                       buttonText: 'Cancel',
                       fillColor: kSecondaryColor),
                   CustomCreateButton(
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                backgroundColor: Colors.transparent,
-                                actions: [
-                                  AlertBox(
-                                      text:
-                                          'You’ve successfully \n created a task',
-                                      buttonText: 'View Task',
-                                      onPressed: () {
-                                        Navigator.pushReplacementNamed(context,
-                                            SingleTaskScreen.routeName);
-                                      }),
-                                ],
-                              );
-                            });
+                      onPressed: () async {
+                        if (_titleController.text.isEmpty ||
+                            _descController.text.isEmpty ||
+                            _selectedDueDate == null) {
+                          showFlagMsg(
+                              context: context,
+                              msg: 'Required fields are missing',
+                              textColor: Colors.red);
+                          return null;
+                        }
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        String res = await TaskMethods().createTask(
+                          userId: user.uid,
+                          dueTime: _selectedDueDate,
+                          title: _titleController.text,
+                          desc: _descController.text,
+                          priorityValue: priorityValue,
+                          categoryValue: categoryValue,
+                          uploadFiles: uploadFiles,
+                          context: context,
+                        );
+                        setState(() {
+                          _isLoading = false;
+                        });
+                        if (res != 'success') {
+                          showFlagMsg(
+                              context: context,
+                              msg: res,
+                              textColor: Colors.red);
+                        } else {
+                          _titleController.text = '';
+                          _descController.text = '';
+                          showTaskCreatedDialog();
+                        }
                       },
                       buttonText: 'Done',
                       fillColor: kPrimaryColor)
