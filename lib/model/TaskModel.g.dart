@@ -10,7 +10,7 @@ TaskModel _$TaskModelFromJson(Map<String, dynamic> json) => TaskModel(
       taskId: json['taskId'] as String,
       userId: json['userId'] as String,
       createdDateTime: DateTime.parse(json['createdDateTime'] as String),
-      dueDateTime: DateTime.parse(json['dueDateTime'] as String),
+      dueDateTime: DateTime.parse(json['dueDateTime'] as String)        ,
       title: json['title'] as String,
       description: json['description'] as String,
       priorityValue: json['priorityValue'] as String,

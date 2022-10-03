@@ -1,12 +1,28 @@
+import 'dart:io';
+
+import 'package:date_picker_timeline/date_picker_widget.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:task_management/Screens/create_project/create_sub_task_screen.dart';
 import 'package:task_management/Screens/single_task/edit_task_screen.dart';
+import 'package:task_management/model/ProjectModel.dart';
+import 'package:task_management/model/UserModel.dart';
+import 'package:task_management/provider/task_provider.dart';
+import 'package:task_management/provider/user_provider.dart';
+import 'package:task_management/resources/project_methods.dart';
 import 'package:task_management/utils/constants.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:task_management/utils/loader.dart';
+import 'package:task_management/utils/toast.dart';
 import 'package:task_management/widgets/commons/custom_create_button.dart';
 import 'package:task_management/widgets/commons/custom_create_text_field.dart';
 import 'package:task_management/widgets/commons/dotted_button.dart';
+
+import '../../model/TaskModel.dart';
+import '../../provider/project_provider.dart';
+import '../../widgets/single_task/attached_file.dart';
 
 class EditProjectScreen extends StatefulWidget {
   static const routeName = '/edit_project';
@@ -20,6 +36,29 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
   late DateTime _selectedValue;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
+  List<TaskModel> tasks = [];
+  List<FileModel>? uploadFiles = [];
+
+  bool isUploading = false;
+
+  bool _isLoading = true;
+
+  Future selectFile() async {
+    setState(() {
+      isUploading = true;
+    });
+    final result = await FilePicker.platform.pickFiles();
+    if (result == null) {
+      return;
+    }
+    final file = File(result.files.first.path!);
+    final fileName = result.files.first.name;
+    String fileUrl = await ProjectMethods().uploadFile(file, fileName);
+    uploadFiles?.add(FileModel(fileName: fileName, fileUrl: fileUrl));
+    setState(() {
+      isUploading = false;
+    });
+  }
 
   @override
   void dispose() {
@@ -30,6 +69,13 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final ProjectModel project =
+        Provider.of<ProjectProvider>(context).getSelectedProject;
+    final UserModel user = Provider.of<UserProvider>(context).getUser;
+    _titleController.text = project.title;
+    _descController.text = project.description;
+    //tasks = project.tasks!;
+
     return Scaffold(
       backgroundColor: kSecondaryColor,
       appBar: AppBar(
@@ -67,7 +113,9 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                 controller: _titleController,
                 hintText: 'Web Development',
                 onChanged: (val) {},
-                onFieldSubmitted: (val) {},
+                onFieldSubmitted: (val) {
+                  _titleController.text = val;
+                },
                 maxLines: 1,
               ),
               const HeadingText(
@@ -89,7 +137,13 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                   text: 'Create Sub Task',
                   height: 35.h,
                   onPress: () {
-                    Navigator.pushNamed(context, CreateSubTaskScreen.routeName);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => CreateSubTaskScreen(
+                                  isFromEditProject: true,
+                                )));
+                    //Navigator.pushNamed(context, CreateSubTaskScreen.routeName,);
                   }),
               Container(
                 height: 1.h,
@@ -97,8 +151,34 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                 width: double.infinity,
                 color: kWhiteFontColor.withOpacity(0.38),
               ),
-              TaskTile(index: 1, title: 'Web Design', dateTime: DateTime.now()),
-              TaskTile(index: 2, title: 'Web Dev', dateTime: DateTime.now()),
+              if (tasks.isNotEmpty)
+                SizedBox(
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: tasks.length,
+                      itemBuilder: (context, index) {
+                        return TaskTile(
+                            task: tasks[index],
+                            index: index + 1,
+                            title: tasks[index].title,
+                            dateTime: tasks[index].dueDateTime);
+                      }),
+                ),
+              if (project.tasks!.isNotEmpty)
+                SizedBox(
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: project.tasks!.length,
+                      itemBuilder: (context, index) {
+                        return TaskTile(
+                            task: project.tasks![index],
+                            index: index + 1,
+                            title: project.tasks![index].title,
+                            dateTime: project.tasks![index].dueDateTime);
+                      }),
+                ),
+              // TaskTile(index: 1, title: 'Web Design', dateTime: DateTime.now()),
+              // TaskTile(index: 2, title: 'Web Dev', dateTime: DateTime.now()),
               SizedBox(height: 20.h),
               const HeadingText(
                 title: 'Attach Files',
@@ -107,7 +187,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                 elevation: 0,
                 fillColor: kTextFieldColor,
                 //splashColor: Colors.greenAccent,
-                onPressed: () {},
+                onPressed: selectFile,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.r),
                 ),
@@ -116,26 +196,44 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                   width: 120.w,
                   child: Padding(
                     padding: EdgeInsets.all(8.0.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.upload_outlined,
-                            color: Color(0xFFBFBFBF)),
-                        Padding(
-                          padding: EdgeInsets.only(left: 10.0.w),
-                          child: Text(
-                            'Upload',
-                            style: kBodyStyle6,
+                    child: isUploading
+                        ? spinKit()
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.upload_outlined,
+                                  color: Color(0xFFBFBFBF)),
+                              Padding(
+                                padding: EdgeInsets.only(left: 10.0.w),
+                                child: Text(
+                                  'Upload',
+                                  style: kBodyStyle6,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               ),
               SizedBox(
                 height: 20.h,
               ),
+              if (project.files!.isNotEmpty)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: SizedBox(
+                    height: 70.h,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemCount: project.files!.length,
+                        itemBuilder: (context, index) {
+                          return AttachedFile(
+                            filename: project.files![index].fileName!,
+                          );
+                        }),
+                  ),
+                ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -146,8 +244,42 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                       buttonText: 'Cancel',
                       fillColor: kSecondaryColor),
                   CustomCreateButton(
-                      onPressed: () {
-                        Navigator.pop(context);
+                      onPressed: () async {
+                        if (_titleController.text.isEmpty ||
+                            _descController.text.isEmpty) {
+                          showFlagMsg(
+                              context: context,
+                              msg: 'Required fields are missing',
+                              textColor: Colors.red);
+                          return null;
+                        }
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        String res = '';
+                        res = await ProjectMethods().updateProject(
+                            userId: user.uid,
+                            projectId: project.projectId,
+                            title: _titleController.text,
+                            desc: _descController.text,
+                            context: context,
+                            tasks: project.tasks,
+                            createdDate: project.createdDateTime,
+                            isPending: project.isPending,
+                            uploadedFiles: project.files,
+                            toUploadFiles: uploadFiles);
+                        setState(() {
+                          _isLoading = false;
+                        });
+                        if (res != 'success') {
+                          showFlagMsg(
+                              context: context,
+                              msg: res,
+                              textColor: Colors.red);
+                        } else {
+                          showToast('Project Updated Successfully');
+                          Navigator.pop(context);
+                        }
                       },
                       buttonText: 'Done',
                       fillColor: kPrimaryColor)
@@ -166,11 +298,13 @@ class TaskTile extends StatelessWidget {
   final int index;
   final String title;
   final DateTime dateTime;
+  final TaskModel task;
   const TaskTile({
     Key? key,
     required this.index,
     required this.title,
     required this.dateTime,
+    required this.task,
   }) : super(key: key);
 
   @override
@@ -212,7 +346,15 @@ class TaskTile extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              Navigator.pushNamed(context, EditTaskScreen.routeName);
+              Provider.of<TaskProvider>(context, listen: false).setSubTask =
+                  task;
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => EditTaskScreen(
+                            isProjectTask: true,
+                          )));
+              //Navigator.pushNamed(context, EditTaskScreen.routeName);
             },
             child: const Icon(
               Icons.edit_outlined,

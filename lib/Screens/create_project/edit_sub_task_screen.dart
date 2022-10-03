@@ -7,7 +7,6 @@ import 'package:task_management/model/TaskModel.dart';
 import 'package:task_management/model/UserModel.dart';
 import 'package:task_management/provider/task_provider.dart';
 import 'package:task_management/provider/user_provider.dart';
-import 'package:task_management/resources/project_methods.dart';
 import 'package:task_management/resources/task_methods.dart';
 import 'package:task_management/utils/constants.dart';
 import "package:date_picker_timeline/date_picker_timeline.dart";
@@ -20,9 +19,8 @@ import 'package:task_management/widgets/single_task/attached_file.dart';
 import 'package:uuid/uuid.dart';
 
 class CreateSubTaskScreen extends StatefulWidget {
-  static const routeName = '/create_sub_task';
-  final bool isFromEditProject;
-  const CreateSubTaskScreen({Key? key,  this.isFromEditProject=false,}) : super(key: key);
+  static const routeName = '/edit_sub_task';
+  const CreateSubTaskScreen({Key? key,}) : super(key: key);
 
   @override
   State<CreateSubTaskScreen> createState() => _CreateSubTaskScreenState();
@@ -309,28 +307,11 @@ class _CreateSubTaskScreenState extends State<CreateSubTaskScreen> {
                             categoryValue: categoryValue,
                             files: uploadFiles,
                             isPending: true);
-                       
-                        Provider.of<TaskProvider>(context, listen: false)
-                            .setSubTask = task;
-                        if(widget.isFromEditProject){
-                          //TODO: add logic for adding the task to project in firebase
-                          String res= await ProjectMethods().createProjectTaskFromEdit(userId: user.uid, task: task, context: context);
-                          if (res != 'success') {
-                            setState(() {
-                              _isLoading = false;
-                            });
-                            showFlagMsg(
-                                context: context,
-                                msg: res,
-                                textColor: Colors.red);
-                            return ;
-                          } else {
-                            showToast('SubTask is created');
-                          }
-                        }
                         setState(() {
                           _isLoading = false;
                         });
+                        Provider.of<TaskProvider>(context, listen: false)
+                            .setSubTask = task;
                         Navigator.pop(context, true);
                       },
                       buttonText: 'Done',

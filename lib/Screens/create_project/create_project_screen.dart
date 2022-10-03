@@ -294,10 +294,11 @@ class TaskTile extends StatelessWidget {
             DateFormat.yMd().format(dateTime),
             style: kBodyStyle14,
           ),
-          Icon(
-            Icons.edit_outlined,
-            color: kWhiteColor,
-          )
+          SizedBox(width: 30.w,)
+          // Icon(
+          //   Icons.edit_outlined,
+          //   color: kWhiteColor,
+          // )
         ],
       ),
     );
