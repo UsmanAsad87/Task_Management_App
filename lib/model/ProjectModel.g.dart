@@ -36,9 +36,7 @@ Map<String, dynamic> _$ProjectModelToJson(ProjectModel instance) =>
       'title': instance.title,
       'description': instance.description,
       'isPending': instance.isPending,
-      'tasks': instance.tasks?.map((e) => e.toJson()).toList(),
-      'files': instance.files?.map((e) => e.toJson()).toList(),
+      'tasks': instance.tasks,
+      'files': instance.files,
       'comments': instance.comments,
     };
-
-// ?.map((e) => e.toJson()).toList()

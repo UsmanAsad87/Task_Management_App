@@ -107,7 +107,8 @@ class _SingleTaskScreenState extends State<SingleTaskScreen> {
                     padding: EdgeInsets.only(left: 20.w, right: 20.w),
                     decoration: BoxDecoration(
                         color: kSecondaryColor,
-                        borderRadius: BorderRadius.circular(35.r)),
+                        borderRadius: BorderRadius.only(topRight: Radius.circular(35.r),topLeft: Radius.circular(35.r)),
+                    ),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
                       child: Column(

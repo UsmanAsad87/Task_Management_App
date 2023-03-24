@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1023271779969",
+    "firebase_url": "https://taskmanagement-a5d8a-default-rtdb.firebaseio.com",
     "project_id": "taskmanagement-a5d8a",
     "storage_bucket": "taskmanagement-a5d8a.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "1023271779969-ejf1liir3f29bn188qvvb506d569jpb0.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1023271779969-j8lsm4rpagqdbprtiobv48dro42kboot.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.taskManagement"
+              }
             }
           ]
         }

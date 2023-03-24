@@ -34,6 +34,6 @@ Map<String, dynamic> _$TaskModelToJson(TaskModel instance) => <String, dynamic>{
       'priorityValue': instance.priorityValue,
       'categoryValue': instance.categoryValue,
       'isPending': instance.isPending,
-      'files': instance.files?.map((e) => e.toJson()).toList(),
+      'files': instance.files,
       'comments': instance.comments,
     };

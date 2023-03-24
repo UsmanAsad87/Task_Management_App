@@ -78,6 +78,79 @@ class ProjectMethods {
     return res;
   }
 
+  Future<String> updateProject({
+    required String userId,
+    required String projectId,
+    required String title,
+    required String desc,
+    required BuildContext context,
+    required List<TaskModel>? tasks,
+    required DateTime createdDate,
+    required bool isPending,
+    required List<FileModel>? uploadedFiles,
+    required List<FileModel>? toUploadFiles,
+  }) async {
+    String res = "Some error occurred";
+    try {
+      for (var element in toUploadFiles!) {
+        uploadedFiles!.add(element);
+      }
+      ProjectModel project = ProjectModel(
+          projectId: projectId,
+          userId: userId,
+          createdDateTime: createdDate,
+          title: title,
+          description: desc,
+          isPending: isPending,
+          tasks: tasks,
+          files: uploadedFiles);
+
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('projects')
+          .doc(projectId)
+          .update(project.toJson());
+
+      ProjectProvider projectProvider = Provider.of(context, listen: false);
+      await projectProvider.refreshSelectedProject(projectId);
+
+      res = 'success';
+    } catch (e) {
+      res = e.toString();
+    }
+
+    return res;
+  }
+  Future<String> createProjectTaskFromEdit({
+    required String userId,
+    required TaskModel task,
+    required BuildContext context,
+  }) async {
+    final ProjectModel project =
+        Provider.of<ProjectProvider>(context, listen: false).getSelectedProject;
+    String res = "Some error occurred";
+    try {
+      project.tasks!.add(task);
+
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('projects')
+          .doc(project.projectId)
+          .update(project.toJson());
+      ProjectProvider projectProvider = Provider.of(context, listen: false);
+      await projectProvider.refreshSelectedProject(project.projectId);
+      Provider.of<TaskProvider>(context, listen: false).setSubTask = task;
+
+      res = 'success';
+    } catch (e) {
+      res = e.toString();
+    }
+
+    return res;
+  }
+
   Future<String> updateProjectTask({
     required String userId,
     required String taskId,

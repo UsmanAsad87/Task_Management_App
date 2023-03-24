@@ -44,8 +44,7 @@ const kProgressColor = Color(0xFF05FF00);
 const kProgressInactiveColor = Color(0xFF004064);
 
 const kInactiveTabColor = Color(0xFFF3F3F3);
-const kInactiveNavItemColor = Color(0xFF45575B);
-
+const kInactiveNavItemColor = Color(0xFF45575B) ;
 final kHeadingStyle2 = GoogleFonts.poppins(
     color: kWhiteFontColor, fontSize: 24.sp, fontWeight: FontWeight.w500);
 final kHeadingStyle3 = GoogleFonts.poppins(

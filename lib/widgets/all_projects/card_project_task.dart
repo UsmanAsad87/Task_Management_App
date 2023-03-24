@@ -59,7 +59,8 @@ class _CardProjectTaskState extends State<CardProjectTask> {
                         child: Text(widget.task.title, style: kBodyStyle2)),
                     widget.task.isPending
                         ? InkWell(
-                            onTap: () {
+                            onTap: () async {
+                              Provider.of<TaskProvider>(context, listen: false).setSubTask = widget.task;
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

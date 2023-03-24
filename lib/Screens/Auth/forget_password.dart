@@ -131,10 +131,6 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     _isLoading = false;
                   });
 
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //     builder: (_) => ChangePassword(
-                  //           email: _emailController.text,
-                  //         )));
                 } else {
                   showFlagMsg(
                       context: context,
